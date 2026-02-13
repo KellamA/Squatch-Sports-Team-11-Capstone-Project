@@ -9,9 +9,21 @@ import SwiftUI
 
 @main
 struct Squatch_Sports_WatchOS_Companion_Watch_AppApp: App {
+    @State private var showSplash = true
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Group {
+                if showSplash {
+                    SplashView()
+                        .task {
+                            try? await Task.sleep(for: .seconds(1.8))
+                            showSplash = false
+                        }
+                } else {
+                    ContentView()
+                }
+            }
         }
     }
 }

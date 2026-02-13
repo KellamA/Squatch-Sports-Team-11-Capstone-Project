@@ -25,7 +25,7 @@ struct Squatch_Sports_Basketball_Training_WatchOS_CompanionApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView()
         }
         .modelContainer(sharedModelContainer)
     }
