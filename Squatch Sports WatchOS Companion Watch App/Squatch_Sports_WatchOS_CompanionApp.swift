@@ -16,6 +16,9 @@ struct Squatch_Sports_WatchOS_Companion_Watch_AppApp: App {
             Group {
                 if showSplash {
                     SplashView()
+
+                        .background(Color.white)
+                        .environment(\.colorScheme, .light)
                         .task {
                             try? await Task.sleep(for: .seconds(1.8))
                             showSplash = false
