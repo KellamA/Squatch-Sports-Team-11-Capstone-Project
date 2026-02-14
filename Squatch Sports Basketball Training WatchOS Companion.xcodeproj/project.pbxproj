@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7A7DC9D2F3FE9AA008C319B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */; };
+		E7A7DC9E2F3FE9AA008C319B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */; };
+		E7A7DCA02F3FF6D5008C319B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */; };
+		E7A7DCA12F3FF6D5008C319B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */; };
 		EA0E88492F33C5590048AD23 /* Squatch Sports WatchOS Companion Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EA0E88292F33C5570048AD23 /* Squatch Sports WatchOS Companion Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -63,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA0E87F92F33C3CE0048AD23 /* Squatch Sports Basketball Training WatchOS Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA0E88082F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS CompanionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA0E88122F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS CompanionUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,6 +159,8 @@
 		EA0E87F02F33C3CE0048AD23 = {
 			isa = PBXGroup;
 			children = (
+				E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */,
+				E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */,
 				EA0E87FB2F33C3CE0048AD23 /* Squatch Sports Basketball Training WatchOS Companion */,
 				EA0E880B2F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionTests */,
 				EA0E88152F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionUITests */,
@@ -380,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A7DCA02F3FF6D5008C319B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +410,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A7DCA12F3FF6D5008C319B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A7DC9D2F3FE9AA008C319B /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,6 +457,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A7DC9E2F3FE9AA008C319B /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
