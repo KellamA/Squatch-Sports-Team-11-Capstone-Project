@@ -2,7 +2,6 @@
 // Main entry for iOS version of prototype workout app
 
 import SwiftUI
-import SharedWorkout
 
 @main
 struct Squatch_Sports_Basketball_Training_iOSApp: App {

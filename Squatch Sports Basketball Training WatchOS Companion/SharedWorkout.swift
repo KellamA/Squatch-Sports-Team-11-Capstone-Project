@@ -3,6 +3,7 @@
 
 import Foundation
 import WatchConnectivity
+import Combine
 
 // Workout model (simplified for prototype)
 struct Workout: Identifiable, Codable {
@@ -29,6 +30,8 @@ class WorkoutConnectivity: NSObject, ObservableObject, WCSessionDelegate {
         if WCSession.isSupported() {
             WCSession.default.delegate = self
             WCSession.default.activate()
+        } else {
+            print("WCSession is not supported on this device. Connectivity features are disabled.")
         }
     }
 
@@ -50,10 +53,18 @@ class WorkoutConnectivity: NSObject, ObservableObject, WCSessionDelegate {
     }
 
     // MARK: - WCSessionDelegate
-    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            print("WCSession activation failed with error: \(error.localizedDescription)")
+        } else {
+            print("WCSession activated with state: \(activationState.rawValue)")
+        }
+    }
 
+    #if os(iOS)
     func sessionDidBecomeInactive(_ session: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) { WCSession.default.activate() }
+    #endif
 
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         DispatchQueue.main.async {

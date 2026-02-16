@@ -77,9 +77,34 @@
 		EA0E883F2F33C5590048AD23 /* Squatch Sports WatchOS Companion Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Squatch Sports WatchOS Companion Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EA0E88AB2F43CE850048AD23 /* Exceptions for "Squatch Sports Basketball Training WatchOS Companion" folder in "Squatch Sports WatchOS Companion Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				Item.swift,
+				SharedWorkout.swift,
+				Squatch_Sports_Basketball_Training_WatchOS_CompanionApp.swift,
+			);
+			target = EA0E88282F33C5570048AD23 /* Squatch Sports WatchOS Companion Watch App */;
+		};
+		EA0E88CF2F43D2040048AD23 /* Exceptions for "Squatch Sports Basketball Training WatchOS Companion" folder in "Squatch Sports Basketball Training WatchOS Companion" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				Squatch_Sports_Basketball_Training_WatchOS_CompanionApp.swift,
+			);
+			target = EA0E87F82F33C3CE0048AD23 /* Squatch Sports Basketball Training WatchOS Companion */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EA0E87FB2F33C3CE0048AD23 /* Squatch Sports Basketball Training WatchOS Companion */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EA0E88CF2F43D2040048AD23 /* Exceptions for "Squatch Sports Basketball Training WatchOS Companion" folder in "Squatch Sports Basketball Training WatchOS Companion" target */,
+				EA0E88AB2F43CE850048AD23 /* Exceptions for "Squatch Sports Basketball Training WatchOS Companion" folder in "Squatch Sports WatchOS Companion Watch App" target */,
+			);
 			path = "Squatch Sports Basketball Training WatchOS Companion";
 			sourceTree = "<group>";
 		};

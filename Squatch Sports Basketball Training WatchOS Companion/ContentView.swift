@@ -1,61 +1,36 @@
-//
-//  ContentView.swift
-//  Squatch Sports Basketball Training WatchOS Companion
-//
-//  Created by Kellam Adams on 2/4/26.
-//
-
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @EnvironmentObject var connectivity: WorkoutConnectivity
+    @State private var inputValue: String = ""
+    @State private var sent: Bool = false
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        VStack {
+            if !connectivity.workoutActive {
+                Text("Waiting for workout to start on iPhone...")
+                    .padding()
+            } else {
+                Text("Workout Active! Enter an integer:")
+                TextField("Enter integer", text: $inputValue)
+                    .frame(width: 100)
+                    .padding()
+                Button("Send to iPhone") {
+                    if let value = Int(inputValue) {
+                        connectivity.sendValueToPhone(value)
+                        sent = true
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                if sent {
+                    Text("Sent!")
+                        .foregroundColor(.green)
                 }
             }
-        } detail: {
-            Text("Select an item")
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
+        .padding()
     }
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+    ContentView().environmentObject(WorkoutConnectivity.shared)
 }

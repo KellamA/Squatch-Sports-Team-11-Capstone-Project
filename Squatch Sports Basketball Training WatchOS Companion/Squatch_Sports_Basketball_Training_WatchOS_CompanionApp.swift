@@ -7,6 +7,9 @@
 
 import SwiftUI
 import SwiftData
+import WatchConnectivity
+import Combine
+// import SharedWorkout -- only if using as a module
 
 @main
 struct Squatch_Sports_Basketball_Training_WatchOS_CompanionApp: App {
@@ -23,9 +26,14 @@ struct Squatch_Sports_Basketball_Training_WatchOS_CompanionApp: App {
         }
     }()
 
+    init() {
+        _ = WorkoutConnectivity.shared
+    }
+
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            ContentView()
+                .environmentObject(WorkoutConnectivity.shared)
         }
         .modelContainer(sharedModelContainer)
     }

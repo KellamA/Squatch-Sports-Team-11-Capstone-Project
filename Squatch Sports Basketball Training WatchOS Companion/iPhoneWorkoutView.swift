@@ -1,6 +1,5 @@
 // iPhoneWorkoutView.swift
 import SwiftUI
-import SharedWorkout
 
 struct iPhoneWorkoutView: View {
     @State private var workoutActive = false
