@@ -1,0 +1,42 @@
+# Xcode
+.DS_Store
+*/build/
+DerivedData/
+*.xcuserdatad
+*.xccheckout
+*.xcscmblueprint
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# User-specific
+*.moved-aside
+*.swp
+*.lock
+*.tmp
+*.orig
+*.log
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Xcode 8 and later
+*.xcuserstate
+
+# iCloud local documents (avoid committing personal paths)
+*.icloud

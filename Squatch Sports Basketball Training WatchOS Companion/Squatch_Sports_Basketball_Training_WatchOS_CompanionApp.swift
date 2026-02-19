@@ -1,3 +1,5 @@
+#if !os(watchOS)
+
 //
 //  Squatch_Sports_Basketball_Training_WatchOS_CompanionApp.swift
 //  Squatch Sports Basketball Training WatchOS Companion
@@ -11,7 +13,7 @@ import WatchConnectivity
 import Combine
 // import SharedWorkout -- only if using as a module
 
-@main
+
 struct Squatch_Sports_Basketball_Training_WatchOS_CompanionApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -38,3 +40,5 @@ struct Squatch_Sports_Basketball_Training_WatchOS_CompanionApp: App {
         .modelContainer(sharedModelContainer)
     }
 }
+
+#endif

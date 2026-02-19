@@ -7,10 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E73ECD1D2F479260009299B8 /* .gitignore 2 in Resources */ = {isa = PBXBuildFile; fileRef = E73ECD1C2F479260009299B8 /* .gitignore 2 */; };
+		E73ECD1E2F479260009299B8 /* .gitignore 2 in Resources */ = {isa = PBXBuildFile; fileRef = E73ECD1C2F479260009299B8 /* .gitignore 2 */; };
+		E73ECD202F479266009299B8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E73ECD1F2F479266009299B8 /* README.md */; };
+		E73ECD212F479266009299B8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E73ECD1F2F479266009299B8 /* README.md */; };
 		E7A7DC9D2F3FE9AA008C319B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */; };
 		E7A7DC9E2F3FE9AA008C319B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */; };
 		E7A7DCA02F3FF6D5008C319B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */; };
 		E7A7DCA12F3FF6D5008C319B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */; };
+		E7C3CFC02F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3CFBF2F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift */; };
+		E7C3CFC12F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3CFBF2F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift */; };
 		EA0E88492F33C5590048AD23 /* Squatch Sports WatchOS Companion Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EA0E88292F33C5570048AD23 /* Squatch Sports WatchOS Companion Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -67,8 +73,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E73ECD1C2F479260009299B8 /* .gitignore 2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".gitignore 2"; sourceTree = "<group>"; };
+		E73ECD1F2F479266009299B8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E7A7DC9C2F3FE9AA008C319B /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		E7A7DC9F2F3FF6D5008C319B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E7C3CFBF2F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squatch_Sports_WatchOS_CompanionApp.swift; sourceTree = "<group>"; };
 		EA0E87F92F33C3CE0048AD23 /* Squatch Sports Basketball Training WatchOS Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS Companion.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA0E88082F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS CompanionTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA0E88122F33C3D00048AD23 /* Squatch Sports Basketball Training WatchOS CompanionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Squatch Sports Basketball Training WatchOS CompanionUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,6 +202,9 @@
 				EA0E88382F33C5590048AD23 /* Squatch Sports WatchOS Companion Watch AppTests */,
 				EA0E88422F33C5590048AD23 /* Squatch Sports WatchOS Companion Watch AppUITests */,
 				EA0E87FA2F33C3CE0048AD23 /* Products */,
+				E7C3CFBF2F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift */,
+				E73ECD1C2F479260009299B8 /* .gitignore 2 */,
+				E73ECD1F2F479266009299B8 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -413,6 +425,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E73ECD1D2F479260009299B8 /* .gitignore 2 in Resources */,
+				E73ECD202F479266009299B8 /* README.md in Resources */,
 				E7A7DCA02F3FF6D5008C319B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,6 +449,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E73ECD1E2F479260009299B8 /* .gitignore 2 in Resources */,
+				E73ECD212F479266009299B8 /* README.md in Resources */,
 				E7A7DCA12F3FF6D5008C319B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7A7DC9D2F3FE9AA008C319B /* SplashView.swift in Sources */,
+				E7C3CFC12F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +499,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7C3CFC02F478D8600A27770 /* Squatch_Sports_WatchOS_CompanionApp.swift in Sources */,
 				E7A7DC9E2F3FE9AA008C319B /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
