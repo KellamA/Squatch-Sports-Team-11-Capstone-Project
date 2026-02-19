@@ -14,7 +14,7 @@ struct SquatchSportsWatchOSCompanionApp: App {
                         .environment(\.colorScheme, .light)
                         .transition(.opacity)
                         .task {
-                            try? await Task.sleep(for: .seconds(1.8))
+                            try? await Task.sleep(for: .seconds(2.8))
                             await MainActor.run {
                                 withAnimation(.easeInOut(duration: 0.25)) {
                                     showSplash = false
@@ -63,4 +63,5 @@ struct WatchRootView: View {
     }
 }
 #endif
+
 

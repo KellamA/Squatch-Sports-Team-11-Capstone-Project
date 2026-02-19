@@ -16,7 +16,7 @@ struct Squatch_Sports_Basketball_Training_iOSApp: App {
                         .preferredColorScheme(.light)
                         .transition(.opacity)
                         .task {
-                            try? await Task.sleep(for: .seconds(1.8))
+                            try? await Task.sleep(for: .seconds(2.8))
                             await MainActor.run {
                                 withAnimation(.easeInOut(duration: 0.25)) {
                                     showSplash = false
