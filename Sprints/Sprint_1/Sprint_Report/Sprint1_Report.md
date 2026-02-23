@@ -1,7 +1,7 @@
 # Sprint 1 Report (Feb 3, 2026 – Feb 22, 2026)
 
 ## YouTube link of Sprint 1 Video (Make this video unlisted)
-* TODO: (https://youtu.be/VnXZkel3P4w)
+* (https://youtu.be/VnXZkel3P4w)
 
 ## What's New (User Facing)
 * Implemented connectivity between the main iOS app and the companion watchOS app
