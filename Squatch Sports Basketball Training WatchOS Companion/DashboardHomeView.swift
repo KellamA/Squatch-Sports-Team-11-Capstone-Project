@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct DashboardHomeView: View {
+    @EnvironmentObject var appData: AppDataStore
+
     private let columns = [
         GridItem(.flexible(), spacing: 14),
         GridItem(.flexible(), spacing: 14)
@@ -9,22 +11,26 @@ struct DashboardHomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-
-                    // Header
+                VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Squatch Sports")
-                            .font(.title2).bold()
+                            .font(.title2)
+                            .bold()
+
                         Text("Choose what you want to work on today.")
                             .foregroundStyle(.secondary)
                     }
                     .padding(.top, 8)
 
-                    // Card grid
-                    LazyVGrid(columns: columns, spacing: 14) {
+                    TodaySummaryCard(
+                        shotsMade: appData.todayMakes,
+                        shotsAttempted: appData.todayAttempts,
+                        sessionsThisWeek: appData.weeklySessionsCompleted
+                    )
 
+                    LazyVGrid(columns: columns, spacing: 14) {
                         NavigationLink {
-                            iPhoneWorkoutView()
+                            iPhoneWorkoutView(selectedDrill: "General Workout")
                         } label: {
                             DashboardCard(
                                 title: "Start Workout",
@@ -44,13 +50,8 @@ struct DashboardHomeView: View {
                             )
                         }
                         .buttonStyle(.plain)
-
                         NavigationLink {
-                            PlaceholderView(
-                                title: "History",
-                                subtitle: "Past sessions",
-                                systemImage: "clock.arrow.circlepath"
-                            )
+                            HistoryView()
                         } label: {
                             DashboardCard(
                                 title: "History",
@@ -61,26 +62,29 @@ struct DashboardHomeView: View {
                         .buttonStyle(.plain)
 
                         NavigationLink {
-                            PlaceholderView(
-                                title: "Analytics",
-                                subtitle: "Trends & stats",
-                                systemImage: "chart.bar.xaxis"
-                            )
+                            AnalyticsView()
                         } label: {
                             DashboardCard(
                                 title: "Analytics",
-                                subtitle: "Trends & stats",
+                                subtitle: "Trends and stats",
                                 systemImage: "chart.bar.xaxis"
                             )
                         }
                         .buttonStyle(.plain)
 
                         NavigationLink {
-                            PlaceholderView(
-                                title: "Settings",
-                                subtitle: "App preferences",
-                                systemImage: "gearshape.fill"
+                            GoalsView()
+                        } label: {
+                            DashboardCard(
+                                title: "Goals",
+                                subtitle: "Track your targets",
+                                systemImage: "target"
                             )
+                        }
+                        .buttonStyle(.plain)
+
+                        NavigationLink {
+                            SettingsView()
                         } label: {
                             DashboardCard(
                                 title: "Settings",
@@ -91,17 +95,17 @@ struct DashboardHomeView: View {
                         .buttonStyle(.plain)
                     }
 
-                    // Tip card
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Tip")
+                        Text("Today’s Focus")
                             .font(.headline)
-                        Text("We’ll connect these pages to real workout + watch data next.")
+
+                        Text(appData.currentFocus)
                             .foregroundStyle(.secondary)
                     }
                     .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(.thinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.top, 4)
                 }
                 .padding()
             }
@@ -110,7 +114,56 @@ struct DashboardHomeView: View {
     }
 }
 
-// Reusable dashboard card
+struct TodaySummaryCard: View {
+    let shotsMade: Int
+    let shotsAttempted: Int
+    let sessionsThisWeek: Int
+
+    private var percentage: Int {
+        guard shotsAttempted > 0 else { return 0 }
+        return Int((Double(shotsMade) / Double(shotsAttempted)) * 100)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Today")
+                .font(.headline)
+
+            Text("Current workout progress")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                SummaryStatView(value: "\(shotsMade)", label: "Makes")
+                SummaryStatView(value: "\(shotsAttempted)", label: "Attempts")
+                SummaryStatView(value: "\(percentage)%", label: "FG")
+                SummaryStatView(value: "\(sessionsThisWeek)", label: "This Week")
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+struct SummaryStatView: View {
+    let value: String
+    let label: String
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(value)
+                .font(.headline)
+
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
 struct DashboardCard: View {
     let title: String
     let subtitle: String
@@ -133,32 +186,9 @@ struct DashboardCard: View {
             Spacer(minLength: 0)
         }
         .padding()
-        .frame(maxWidth: .infinity, minHeight: 120, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 128, alignment: .leading)
         .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-    }
-}
-
-struct PlaceholderView: View {
-    let title: String
-    let subtitle: String
-    let systemImage: String
-
-    var body: some View {
-        VStack(spacing: 14) {
-            Image(systemName: systemImage)
-                .font(.system(size: 44, weight: .semibold))
-                .symbolRenderingMode(.hierarchical)
-
-            Text(title).font(.title2).bold()
-            Text(subtitle)
-                .foregroundStyle(.secondary)
-
-            Text("Coming soon — we’ll wire this up next.")
-                .foregroundStyle(.secondary)
-                .padding(.top, 8)
-        }
-        .padding()
-        .navigationTitle(title)
+        .contentShape(RoundedRectangle(cornerRadius: 18))
     }
 }
