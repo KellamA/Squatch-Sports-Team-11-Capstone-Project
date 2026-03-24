@@ -1,7 +1,7 @@
 # Sprint 2 Report (Feb 23, 2026 – Mar 8, 2026)
 
-## YouTube link of Sprint 2 Video (Make this video unlisted)
-* TODO: Paste unlisted YouTube link here
+## YouTube link of Sprint 2 Video 
+* TODO:https://youtu.be/vbS0uLlj5D4 
 
 ## What's New (User Facing)
 * Polished the main dashboard so it feels more like a real app instead of a placeholder screen
