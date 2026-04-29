@@ -39,39 +39,50 @@ struct WorkoutSession: Identifiable, Codable {
 }
 
 final class AppDataStore: ObservableObject {
-    @Published var sessions: [WorkoutSession] = [
-        WorkoutSession(
-            drill: "Form Shooting",
-            makes: 32,
-            misses: 8,
-            swishes: 10,
-            attempts: 40,
-            startDate: Calendar.current.date(byAdding: .hour, value: -2, to: Date()) ?? Date(),
-            endDate: Date()
-        ),
-        WorkoutSession(
-            drill: "Free Throws",
-            makes: 18,
-            misses: 7,
-            swishes: 4,
-            attempts: 25,
-            startDate: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date(),
-            endDate: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
-        ),
-        WorkoutSession(
-            drill: "Spot Shooting",
-            makes: 21,
-            misses: 9,
-            swishes: 6,
-            attempts: 30,
-            startDate: Calendar.current.date(byAdding: .day, value: -2, to: Date()) ?? Date(),
-            endDate: Calendar.current.date(byAdding: .day, value: -2, to: Date()) ?? Date()
-        )
-    ]
+    private let defaults: UserDefaults
+    private enum Keys {
+        static let sessions = "squatch.sessions"
+        static let dailyShotGoal = "squatch.dailyShotGoal"
+        static let weeklySessionGoal = "squatch.weeklySessionGoal"
+        static let targetFGGoal = "squatch.targetFGGoal"
+    }
 
-    @Published var dailyShotGoal: Int = 200
-    @Published var weeklySessionGoal: Int = 5
-    @Published var targetFGGoal: Int = 75
+    @Published var sessions: [WorkoutSession] {
+        didSet { persistSessions() }
+    }
+
+    @Published var dailyShotGoal: Int {
+        didSet { defaults.set(dailyShotGoal, forKey: Keys.dailyShotGoal) }
+    }
+
+    @Published var weeklySessionGoal: Int {
+        didSet { defaults.set(weeklySessionGoal, forKey: Keys.weeklySessionGoal) }
+    }
+
+    @Published var targetFGGoal: Int {
+        didSet { defaults.set(targetFGGoal, forKey: Keys.targetFGGoal) }
+    }
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+
+        if let data = defaults.data(forKey: Keys.sessions),
+           let decoded = try? JSONDecoder().decode([WorkoutSession].self, from: data) {
+            self.sessions = decoded
+        } else {
+            self.sessions = []
+        }
+
+        self.dailyShotGoal = (defaults.object(forKey: Keys.dailyShotGoal) as? Int) ?? 200
+        self.weeklySessionGoal = (defaults.object(forKey: Keys.weeklySessionGoal) as? Int) ?? 5
+        self.targetFGGoal = (defaults.object(forKey: Keys.targetFGGoal) as? Int) ?? 75
+    }
+
+    private func persistSessions() {
+        if let data = try? JSONEncoder().encode(sessions) {
+            defaults.set(data, forKey: Keys.sessions)
+        }
+    }
 
     func addSession(_ session: WorkoutSession) {
         sessions.insert(session, at: 0)
@@ -151,7 +162,7 @@ final class AppDataStore: ObservableObject {
         return min(Double(todayAttempts) / Double(dailyShotGoal), 1.0)
     }
 
-    func resetSampleData() {
+    func clearAllSessions() {
         sessions.removeAll()
     }
 }

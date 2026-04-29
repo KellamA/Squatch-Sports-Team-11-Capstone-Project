@@ -33,8 +33,8 @@ struct SettingsView: View {
             }
 
             Section("Data") {
-                Button("Reset Sample Data", role: .destructive) {
-                    appData.resetSampleData()
+                Button("Clear All History", role: .destructive) {
+                    appData.clearAllSessions()
                 }
             }
 
