@@ -23,24 +23,61 @@ struct iPhoneWorkoutView: View {
     private var attempts: Int { totalMakes + misses }
 
     private var subtitleText: String {
-        if selectedDrill == "Spot Shooting" {
-            let positions = CourtPositions.positions(for: selectedDrill)
-            let totalShots = positions.count * shotsPerPosition
+        let positions = CourtPositions.positions(for: selectedDrill)
+
+        switch selectedDrill {
+        case "Spot Shooting":
+            let totalShots = max(1, positions.count * shotsPerPosition)
             if workoutActive {
-                return "Position \(currentPositionIndex + 1) of \(positions.count) • \(attempts)/\(totalShots) shots"
+                return "Position \(min(currentPositionIndex + 1, positions.count)) of \(positions.count) • \(attempts)/\(totalShots) shots"
             }
-            return "25 total shots (5 per spot)"
-        } else if selectedDrill == "Free Throws" {
+            return "\(totalShots) total shots (\(shotsPerPosition) per spot)"
+
+        case "Free Throws":
             if workoutActive {
                 return "Shot \(attempts) of \(shotsPerPosition)"
             }
-            return "5 attempt routine"
-        } else if selectedDrill == "Form Shooting" {
+            return "5 shot routine"
+
+        case "Form Shooting":
             if workoutActive {
                 return "Shot \(attempts) of \(shotsPerPosition)"
             }
             return "Close range mechanics"
-        } else {
+
+        case "Catch & Shoot":
+            if workoutActive {
+                return "Shot \(attempts) of \(shotsPerPosition)"
+            }
+            return "Quick feet and release"
+
+        case "Off the Dribble":
+            if workoutActive {
+                return "Shot \(attempts) of \(shotsPerPosition)"
+            }
+            return "Create space and shoot"
+
+        case "Midrange Series":
+            let totalShots = max(1, positions.count * shotsPerPosition)
+            if workoutActive {
+                return "Position \(min(currentPositionIndex + 1, positions.count)) of \(positions.count) • \(attempts)/\(totalShots) shots"
+            }
+            return "\(totalShots) total midrange shots"
+
+        case "3PT Series":
+            let totalShots = max(1, positions.count * shotsPerPosition)
+            if workoutActive {
+                return "Position \(min(currentPositionIndex + 1, positions.count)) of \(positions.count) • \(attempts)/\(totalShots) shots"
+            }
+            return "\(totalShots) total threes"
+
+        case "Finishing":
+            if workoutActive {
+                return "Shot \(attempts) of \(shotsPerPosition)"
+            }
+            return "Touch and angles at the rim"
+
+        default:
             return workoutActive ? "Active drill session" : "Ready to start"
         }
     }

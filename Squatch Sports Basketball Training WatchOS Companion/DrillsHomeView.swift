@@ -66,51 +66,82 @@ struct DrillsHomeView: View {
             name: "Catch & Shoot",
             subtitle: "Quick feet + release",
             systemImage: "bolt.fill",
-            instructions: ["Coming soon."],
-            targetText: "Coming soon",
-            isAvailable: false,
+            instructions: [
+                "Start ready to catch and shoot.",
+                "Focus on quick footwork and balance.",
+                "Track makes out of 25 or 50 shots."
+            ],
+            targetText: "Target: 25 makes catch-and-shoot",
+            isAvailable: true,
             courtSpots: [],
-            shotsPerSpot: 0
+            shotsPerSpot: 5
         ),
         DrillOption(
             name: "Off the Dribble",
             subtitle: "Create space shots",
             systemImage: "shuffle",
-            instructions: ["Coming soon."],
-            targetText: "Coming soon",
-            isAvailable: false,
+            instructions: [
+                "Use one or two dribbles before each shot.",
+                "Work on balance after creating space.",
+                "Track makes from both directions."
+            ],
+            targetText: "Target: 20 makes off the dribble",
+            isAvailable: true,
             courtSpots: [],
-            shotsPerSpot: 0
+            shotsPerSpot: 5
         ),
         DrillOption(
             name: "Midrange Series",
             subtitle: "Elbows + short corners",
             systemImage: "square.grid.2x2",
-            instructions: ["Coming soon."],
-            targetText: "Coming soon",
-            isAvailable: false,
-            courtSpots: [],
-            shotsPerSpot: 0
+            instructions: [
+                "Work from both elbows and both short corners.",
+                "Focus on rhythm and consistency.",
+                "Track total makes across all spots."
+            ],
+            targetText: "Target: 5 makes from each midrange spot",
+            isAvailable: true,
+            courtSpots: [
+                "Left Elbow",
+                "Right Elbow",
+                "Left Short Corner",
+                "Right Short Corner"
+            ],
+            shotsPerSpot: 5
         ),
         DrillOption(
             name: "3PT Series",
             subtitle: "Volume + rhythm",
             systemImage: "basketball.fill",
-            instructions: ["Coming soon."],
-            targetText: "Coming soon",
-            isAvailable: false,
-            courtSpots: [],
-            shotsPerSpot: 0
+            instructions: [
+                "Shoot game-speed threes from around the arc.",
+                "Focus on rhythm, balance, and follow-through.",
+                "Track makes over a full shooting set."
+            ],
+            targetText: "Target: 25 made threes",
+            isAvailable: true,
+            courtSpots: [
+                "Left Corner",
+                "Left Wing",
+                "Top of Key",
+                "Right Wing",
+                "Right Corner"
+            ],
+            shotsPerSpot: 5
         ),
         DrillOption(
             name: "Finishing",
             subtitle: "Rim touch & angles",
             systemImage: "figure.run",
-            instructions: ["Coming soon."],
-            targetText: "Coming soon",
-            isAvailable: false,
+            instructions: [
+                "Finish at the rim from different angles.",
+                "Work both left and right hand finishes.",
+                "Track makes and focus on touch."
+            ],
+            targetText: "Target: 20 made finishes",
+            isAvailable: true,
             courtSpots: [],
-            shotsPerSpot: 0
+            shotsPerSpot: 5
         )
     ]
     var body: some View {
