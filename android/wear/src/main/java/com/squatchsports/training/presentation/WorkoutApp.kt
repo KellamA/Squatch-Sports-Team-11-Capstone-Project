@@ -54,6 +54,7 @@ import com.squatchsports.training.R
 import com.squatchsports.training.connectivity.WorkoutConnectivity
 import com.squatchsports.training.shared.CourtPosition
 import com.squatchsports.training.shared.ShotDirection
+import com.squatchsports.training.shared.WatchStats
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
@@ -89,15 +90,18 @@ fun WearWorkoutApp(connectivity: WorkoutConnectivity) {
         shotEvent?.let { state.recordPhoneShot(it.value, connectivity.workoutActive) }
     }
 
-    when {
-        state.showSummary -> WorkoutSummaryScreen(state)
-        connectivity.workoutActive -> ActiveWorkoutScreen(state, connectivity.workoutActive)
-        else -> WaitingScreen()
+    Box(Modifier.fillMaxSize()) {
+        when {
+            state.showSummary -> WorkoutSummaryScreen(state, connectivity.stats)
+            connectivity.workoutActive -> ActiveWorkoutScreen(state, connectivity.workoutActive)
+            else -> WaitingScreen(connectivity.stats)
+        }
+        WatchCelebrationOverlay(connectivity.celebrationEvent)
     }
 }
 
 @Composable
-private fun WaitingScreen() {
+private fun WaitingScreen(stats: WatchStats?) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -105,16 +109,28 @@ private fun WaitingScreen() {
             .padding(horizontal = 18.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            PhoneSyncIcon()
-            Text("Waiting for workout", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-            Text(
-                "Start a session on your phone to enable shot logging.",
-                color = SecondaryText,
-                fontSize = 9.sp,
-                lineHeight = 11.sp,
-                textAlign = TextAlign.Center,
-            )
+        if (stats != null) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                WatchStatsPanel(stats)
+                Text(
+                    "Start a workout on your phone",
+                    color = SecondaryText,
+                    fontSize = 9.sp,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        } else {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                PhoneSyncIcon()
+                Text("Waiting for workout", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                Text(
+                    "Start a session on your phone to enable shot logging.",
+                    color = SecondaryText,
+                    fontSize = 9.sp,
+                    lineHeight = 11.sp,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }
@@ -501,7 +517,7 @@ private fun CourtView(position: CourtPosition?, isRound: Boolean) {
 }
 
 @Composable
-private fun WorkoutSummaryScreen(state: WearWorkoutState) {
+private fun WorkoutSummaryScreen(state: WearWorkoutState, stats: WatchStats?) {
     val session = state.currentSession
     val isRound = LocalConfiguration.current.isScreenRound
     Column(
@@ -521,6 +537,14 @@ private fun WorkoutSummaryScreen(state: WearWorkoutState) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(session?.drillName ?: "Workout", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
             Text("Complete!", color = SecondaryText, fontSize = 10.sp)
+            if (stats != null && stats.currentStreak > 0) {
+                Text(
+                    "🔥 ${stats.currentStreak}-day streak",
+                    color = WarningOrange,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
         }
 
         if (session != null) {

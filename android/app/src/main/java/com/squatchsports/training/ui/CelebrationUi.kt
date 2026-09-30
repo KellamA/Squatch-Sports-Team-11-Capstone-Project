@@ -1,14 +1,13 @@
 package com.squatchsports.training.ui
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -38,8 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.squatchsports.training.data.Celebration
-import com.squatchsports.training.shared.GoalType
-import com.squatchsports.training.shared.StreakCelebration
+import com.squatchsports.training.shared.CelebrationMessage
 import kotlinx.coroutines.delay
 
 private const val CELEBRATION_MILLIS = 3500L
@@ -66,18 +64,15 @@ fun CelebrationOverlay(celebration: Celebration?, onDismiss: () -> Unit) {
                 .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClick = onDismiss),
             contentAlignment = Alignment.Center,
         ) {
-            AnimatedContent(
-                targetState = shown,
-                transitionSpec = {
-                    scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)) togetherWith
-                        scaleOut()
-                },
-                label = "celebration",
-            ) { current ->
-                when (current) {
-                    is Celebration.Streak -> StreakCelebrationCard(current.streak)
-                    is Celebration.Goals -> GoalCelebrationCard(current)
-                    null -> Unit
+            shown?.let { current ->
+                // A fresh transition per celebration so each card bounces in, including the first.
+                val appear = remember(current) { MutableTransitionState(false).apply { targetState = true } }
+                AnimatedVisibility(
+                    visibleState = appear,
+                    enter = scaleIn(spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow)),
+                    exit = scaleOut(),
+                ) {
+                    CelebrationCard(current.toMessage())
                 }
             }
         }
@@ -85,36 +80,7 @@ fun CelebrationOverlay(celebration: Celebration?, onDismiss: () -> Unit) {
 }
 
 @Composable
-private fun StreakCelebrationCard(celebration: StreakCelebration) {
-    val (title, subtitle) = when {
-        celebration.isMilestone -> "Milestone reached!" to "${celebration.streak} training days in a row. Squatch is proud."
-        celebration.isNewBest -> "New personal best!" to "Your longest streak ever: ${celebration.streak} days."
-        celebration.streak == 1 -> "Streak started!" to "Come back tomorrow to keep it going."
-        else -> "Streak continued!" to "Nice work, keep the fire going."
-    }
-    CelebrationCard(emoji = "🔥", headline = "${celebration.streak}", caption = "day streak", title = title, subtitle = subtitle)
-}
-
-@Composable
-private fun GoalCelebrationCard(celebration: Celebration.Goals) {
-    val goals = celebration.completed
-    val subtitle = goals.joinToString("\n") { goal ->
-        when (goal.type) {
-            GoalType.TARGET_FG -> "${goal.type.title}: ${goal.current}% (target ${goal.target}%)"
-            else -> "${goal.type.title}: ${goal.current} / ${goal.target} ${goal.type.unit}"
-        }
-    }
-    CelebrationCard(
-        emoji = "🏆",
-        headline = if (goals.size == 1) "Goal" else "${goals.size} Goals",
-        caption = "complete",
-        title = if (goals.size == 1) "You hit your ${goals.single().type.title} goal!" else "You crushed ${goals.size} goals!",
-        subtitle = subtitle,
-    )
-}
-
-@Composable
-private fun CelebrationCard(emoji: String, headline: String, caption: String, title: String, subtitle: String) {
+private fun CelebrationCard(message: CelebrationMessage) {
     Card(
         modifier = Modifier.padding(32.dp),
         shape = RoundedCornerShape(24.dp),
@@ -126,13 +92,13 @@ private fun CelebrationCard(emoji: String, headline: String, caption: String, ti
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Text(emoji, fontSize = 64.sp)
-            Text(headline, fontSize = 44.sp, fontWeight = FontWeight.Black, color = StreakOrange)
-            Text(caption, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Text(message.emoji, fontSize = 64.sp)
+            Text(message.headline, fontSize = 44.sp, fontWeight = FontWeight.Black, color = StreakOrange)
+            Text(message.caption, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(6.dp))
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+            Text(message.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
             Text(
-                subtitle,
+                message.subtitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,

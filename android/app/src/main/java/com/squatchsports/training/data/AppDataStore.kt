@@ -12,6 +12,7 @@ import com.squatchsports.training.shared.GoalTracker
 import com.squatchsports.training.shared.GoalType
 import com.squatchsports.training.shared.StreakCalculator
 import com.squatchsports.training.shared.StreakResult
+import com.squatchsports.training.shared.WatchStats
 import com.squatchsports.training.shared.WorkoutSession
 import org.json.JSONArray
 import org.json.JSONObject
@@ -128,6 +129,18 @@ class AppDataStore(context: Context) {
 
     val streak: StreakResult
         get() = StreakCalculator.calculateFromSessions(sessions, LocalDate.now())
+
+    /** Snapshot synced to the Wear OS app. */
+    val watchStats: WatchStats
+        get() {
+            val current = streak
+            return WatchStats(
+                currentStreak = current.current,
+                bestStreak = current.best,
+                trainedToday = current.lastTrainingDay == LocalDate.now(),
+                goals = goalProgress,
+            )
+        }
 
     val trainingDays: Set<LocalDate>
         get() = sessions.map { StreakCalculator.toLocalDate(it.endDateMillis) }.toSet()

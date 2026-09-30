@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +45,12 @@ fun SquatchSportsApp(
     val goBack = { if (backStack.size > 1) backStack = backStack.dropLast(1) }
 
     BackHandler(enabled = backStack.size > 1, onBack = goBack)
+
+    // Keep the watch's streak/goal display current, and mirror each popup on the watch.
+    val watchStats = appData.watchStats
+    LaunchedEffect(watchStats) { connectivity.publishStats(watchStats) }
+    val celebration = appData.celebrations.firstOrNull()
+    LaunchedEffect(celebration) { celebration?.let { connectivity.sendCelebration(it.toMessage()) } }
 
     Box(Modifier.fillMaxSize()) {
         Scaffold(
