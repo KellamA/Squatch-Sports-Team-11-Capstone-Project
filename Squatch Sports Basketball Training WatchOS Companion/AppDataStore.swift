@@ -162,6 +162,43 @@ final class AppDataStore: ObservableObject {
         return min(Double(todayAttempts) / Double(dailyShotGoal), 1.0)
     }
 
+    // MARK: - Gamification
+
+    var totalXP: Int {
+        sessions.reduce(0) { total, session in
+            var xp = 25                     // Completing a workout
+            xp += session.makes             // 1 XP per make
+            xp += session.swishes * 2       // 2 bonus XP per swish
+
+            if session.percentage >= 75 {
+                xp += 15                    // Accuracy bonus
+            }
+
+            return total + xp
+        }
+    }
+
+    var playerLevel: Int {
+        (totalXP / 100) + 1
+    }
+
+    var xpInCurrentLevel: Int {
+        totalXP % 100
+    }
+
+    var xpNeededForNextLevel: Int {
+        100
+    }
+
+    var levelProgress: Double {
+        Double(xpInCurrentLevel) / Double(xpNeededForNextLevel)
+    }
+
+    var xpUntilNextLevel: Int {
+        xpNeededForNextLevel - xpInCurrentLevel
+    }
+    
+    
     func clearAllSessions() {
         sessions.removeAll()
     }

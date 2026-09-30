@@ -27,6 +27,14 @@ struct DashboardHomeView: View {
                         shotsAttempted: appData.todayAttempts,
                         sessionsThisWeek: appData.weeklySessionsCompleted
                     )
+                     
+                    PlayerProgressCard(
+                        level: appData.playerLevel,
+                        currentXP: appData.xpInCurrentLevel,
+                        totalXP: appData.totalXP,
+                        xpUntilNextLevel: appData.xpUntilNextLevel,
+                        progress: appData.levelProgress
+                    )
 
                     LazyVGrid(columns: columns, spacing: 14) {
                         NavigationLink {
@@ -190,5 +198,58 @@ struct DashboardCard: View {
         .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 18))
         .contentShape(RoundedRectangle(cornerRadius: 18))
+    }
+}
+
+struct PlayerProgressCard: View {
+    let level: Int
+    let currentXP: Int
+    let totalXP: Int
+    let xpUntilNextLevel: Int
+    let progress: Double
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Player Progress")
+                        .font(.headline)
+
+                    Text("Level \(level)")
+                        .font(.title2)
+                        .bold()
+                }
+
+                Spacer()
+
+                Image(systemName: "trophy.fill")
+                    .font(.system(size: 30))
+                    .foregroundStyle(.yellow)
+            }
+
+            ProgressView(value: progress)
+                .tint(.blue)
+                .scaleEffect(x: 1, y: 2, anchor: .center)
+
+            HStack {
+                Text("\(currentXP) / 100 XP")
+                    .font(.subheadline)
+                    .bold()
+
+                Spacer()
+
+                Text("\(xpUntilNextLevel) XP to Level \(level + 1)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Text("Total XP: \(totalXP)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
