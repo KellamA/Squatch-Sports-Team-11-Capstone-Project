@@ -1,10 +1,7 @@
 package com.squatchsports.training.ui
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,9 +19,11 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,16 +40,15 @@ val StreakOrange = Color(0xFFFF9500)
 @Composable
 fun StreakCard(streak: StreakResult, trainingDays: Set<LocalDate>) {
     val active = streak.current > 0
-    val flameScale = if (active) {
-        val transition = rememberInfiniteTransition(label = "flame")
-        transition.animateFloat(
-            initialValue = 1f,
-            targetValue = 1.15f,
-            animationSpec = infiniteRepeatable(tween(700, easing = FastOutSlowInEasing), RepeatMode.Reverse),
-            label = "flameScale",
-        ).value
-    } else {
-        1f
+    // Pulse a few times, then stop. An endless animation keeps the screen redrawing and slows the device.
+    val flameScale = remember { Animatable(1f) }
+    LaunchedEffect(active) {
+        if (active) {
+            repeat(3) {
+                flameScale.animateTo(1.15f, tween(350, easing = FastOutSlowInEasing))
+                flameScale.animateTo(1f, tween(350, easing = FastOutSlowInEasing))
+            }
+        }
     }
 
     MaterialCard {
@@ -58,7 +56,10 @@ fun StreakCard(streak: StreakResult, trainingDays: Set<LocalDate>) {
             Text(
                 "🔥",
                 fontSize = 40.sp,
-                modifier = Modifier.scale(flameScale),
+                modifier = Modifier.graphicsLayer {
+                    scaleX = flameScale.value
+                    scaleY = flameScale.value
+                },
                 color = if (active) Color.Unspecified else Color.Gray.copy(alpha = 0.4f),
             )
             Spacer(Modifier.width(14.dp))
