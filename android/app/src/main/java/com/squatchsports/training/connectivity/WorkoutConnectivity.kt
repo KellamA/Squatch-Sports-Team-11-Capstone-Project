@@ -6,8 +6,12 @@ import android.os.Looper
 import android.util.Log
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
+import com.google.android.gms.wearable.PutDataRequest
 import com.google.android.gms.wearable.Wearable
+import com.squatchsports.training.shared.CelebrationMessage
 import com.squatchsports.training.shared.CourtPosition
+import com.squatchsports.training.shared.GamificationPayloads
+import com.squatchsports.training.shared.WatchStats
 import com.squatchsports.training.shared.WorkoutPaths
 import com.squatchsports.training.shared.WorkoutPayloads
 import java.util.concurrent.CopyOnWriteArraySet
@@ -16,6 +20,7 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
     private val appContext = context.applicationContext
     private val messageClient = Wearable.getMessageClient(appContext)
     private val nodeClient = Wearable.getNodeClient(appContext)
+    private val dataClient = Wearable.getDataClient(appContext)
     private val mainHandler = Handler(Looper.getMainLooper())
     private val shotListeners = CopyOnWriteArraySet<(Int) -> Unit>()
 
@@ -68,7 +73,21 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
         sendMessage(WorkoutPaths.POSITION, WorkoutPayloads.position(position))
     }
 
+    /** Syncs the latest streak/goal snapshot. Stored by the Data Layer, so the watch gets it even if it opens later. */
+    fun publishStats(stats: WatchStats) {
+        val data = GamificationPayloads.stats(stats)
+        val request = PutDataRequest.create(WorkoutPaths.STATS).setData(data).setUrgent()
+        dataClient.putDataItem(request)
+            .addOnSuccessListener { Log.d(COMM_TAG, "phone => data   ${WorkoutPaths.STATS}  ${data.decodeToString()}") }
+            .addOnFailureListener { error -> Log.w(TAG, "Unable to publish stats", error) }
+    }
+
+    fun sendCelebration(message: CelebrationMessage) {
+        sendMessage(WorkoutPaths.CELEBRATION, GamificationPayloads.celebration(message))
+    }
+
     override fun onMessageReceived(event: MessageEvent) {
+        Log.d(COMM_TAG, "phone <- watch  ${event.path}  ${event.data.decodeToString()}")
         mainHandler.post {
             when (event.path) {
                 WorkoutPaths.WORKOUT_STARTED -> workoutActive = true
@@ -100,6 +119,9 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
                 nodes.forEach { node ->
                     messages.forEach { (path, data) ->
                         messageClient.sendMessage(node.id, path, data)
+                            .addOnSuccessListener {
+                                Log.d(COMM_TAG, "phone -> watch  $path  ${data.decodeToString()}")
+                            }
                             .addOnFailureListener { error ->
                                 Log.w(TAG, "Unable to send $path to ${node.displayName}", error)
                             }
@@ -111,5 +133,8 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
 
     private companion object {
         const val TAG = "WorkoutConnectivity"
+
+        /** Filter Logcat by this tag to see every phone/watch message. */
+        const val COMM_TAG = "SquatchComm"
     }
 }

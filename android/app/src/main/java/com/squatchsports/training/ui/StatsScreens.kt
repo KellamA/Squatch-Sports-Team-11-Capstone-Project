@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.SportsBasketball
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -95,60 +94,6 @@ private fun InfoBlock(title: String, value: String) {
     MaterialCard {
         Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         Text(value, modifier = Modifier.padding(top = 8.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-}
-
-@Composable
-fun GoalsScreen(appData: AppDataStore, contentPadding: PaddingValues) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        GoalProgressCard("Daily Shot Goal", appData.todayAttempts, appData.dailyShotGoal, "Shots")
-        GoalProgressCard("Weekly Session Goal", appData.weeklySessionsCompleted, appData.weeklySessionGoal, "Sessions")
-        GoalProgressCard("Make Goal", appData.todayMakes, 100, "Makes")
-        MaterialCard {
-            Text("Target FG%", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            Text(
-                "${appData.targetFgGoal}%",
-                modifier = Modifier.padding(top = 8.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-            )
-            val message = if (appData.shootingPercentage >= appData.targetFgGoal) {
-                "You are hitting your target."
-            } else {
-                "Keep shooting to close the gap."
-            }
-            Text(
-                "Current FG% is ${appData.shootingPercentage}%. $message",
-                modifier = Modifier.padding(top = 8.dp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
-}
-
-@Composable
-private fun GoalProgressCard(title: String, current: Int, target: Int, label: String) {
-    val progress = if (target <= 0) 0f else (current.toFloat() / target).coerceAtMost(1f)
-    MaterialCard {
-        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-        Text(
-            "$current / $target $label",
-            modifier = Modifier.padding(top = 10.dp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        LinearProgressIndicator(
-            progress = { progress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-        )
     }
 }
 

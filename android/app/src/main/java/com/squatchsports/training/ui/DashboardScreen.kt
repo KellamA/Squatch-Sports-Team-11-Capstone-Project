@@ -63,6 +63,10 @@ fun DashboardScreen(
             )
         }
 
+        StreakCard(appData.streak, appData.trainingDays)
+
+        TodayGoalsCard(appData.goalProgress, onClick = onGoals)
+
         TodaySummaryCard(
             shotsMade = appData.todayMakes,
             shotsAttempted = appData.todayAttempts,

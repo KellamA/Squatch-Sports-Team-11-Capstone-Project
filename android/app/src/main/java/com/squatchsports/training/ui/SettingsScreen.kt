@@ -66,6 +66,22 @@ fun SettingsScreen(appData: AppDataStore, contentPadding: PaddingValues) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { appData.loadDemoHistory() }
+                    .padding(16.dp),
+            ) {
+                Column {
+                    Text("Load Demo History", color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        "Replaces history with 6 workouts from the past week (for testing streaks)",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            HorizontalDivider()
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
                     .clickable { appData.clearAllSessions() }
                     .padding(16.dp),
             ) {

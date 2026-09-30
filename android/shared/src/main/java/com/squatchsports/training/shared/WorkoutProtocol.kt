@@ -8,6 +8,12 @@ object WorkoutPaths {
     const val SHOT = "/squatch/workout/shot"
     const val POSITION = "/squatch/workout/position"
     const val DRILL_INFO = "/squatch/workout/drill"
+
+    /** Data item (persisted and synced): latest streak and goal snapshot from the phone. */
+    const val STATS = "/squatch/stats"
+
+    /** Message: celebration popup to show on the watch. */
+    const val CELEBRATION = "/squatch/celebration"
 }
 
 object WorkoutPayloads {
