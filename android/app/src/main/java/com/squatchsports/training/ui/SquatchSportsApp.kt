@@ -1,6 +1,7 @@
 package com.squatchsports.training.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -44,52 +45,56 @@ fun SquatchSportsApp(
 
     BackHandler(enabled = backStack.size > 1, onBack = goBack)
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(screenTitle(current)) },
-                navigationIcon = {
-                    if (backStack.size > 1) {
-                        IconButton(onClick = goBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+    Box(Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text(screenTitle(current)) },
+                    navigationIcon = {
+                        if (backStack.size > 1) {
+                            IconButton(onClick = goBack) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                            }
                         }
-                    }
-                },
-            )
-        },
-    ) { contentPadding ->
-        when (current) {
-            AppScreen.Dashboard -> DashboardScreen(
-                appData = appData,
-                contentPadding = contentPadding,
-                onStartWorkout = { navigate(AppScreen.Workout("General Workout")) },
-                onDrills = { navigate(AppScreen.Drills) },
-                onHistory = { navigate(AppScreen.History) },
-                onAnalytics = { navigate(AppScreen.Analytics) },
-                onGoals = { navigate(AppScreen.Goals) },
-                onSettings = { navigate(AppScreen.Settings) },
-            )
-            AppScreen.Drills -> DrillsScreen(
-                contentPadding = contentPadding,
-                onDrillSelected = { navigate(AppScreen.DrillDetail(it)) },
-            )
-            is AppScreen.DrillDetail -> DrillDetailScreen(
-                drill = current.drill,
-                contentPadding = contentPadding,
-                onStart = { navigate(AppScreen.Workout(current.drill.name)) },
-            )
-            is AppScreen.Workout -> WorkoutScreen(
-                selectedDrill = current.drillName,
-                appData = appData,
-                connectivity = connectivity,
-                contentPadding = contentPadding,
-            )
-            AppScreen.History -> HistoryScreen(appData, contentPadding)
-            AppScreen.Analytics -> AnalyticsScreen(appData, contentPadding)
-            AppScreen.Goals -> GoalsScreen(appData, contentPadding)
-            AppScreen.Settings -> SettingsScreen(appData, contentPadding)
+                    },
+                )
+            },
+        ) { contentPadding ->
+            when (current) {
+                AppScreen.Dashboard -> DashboardScreen(
+                    appData = appData,
+                    contentPadding = contentPadding,
+                    onStartWorkout = { navigate(AppScreen.Workout("General Workout")) },
+                    onDrills = { navigate(AppScreen.Drills) },
+                    onHistory = { navigate(AppScreen.History) },
+                    onAnalytics = { navigate(AppScreen.Analytics) },
+                    onGoals = { navigate(AppScreen.Goals) },
+                    onSettings = { navigate(AppScreen.Settings) },
+                )
+                AppScreen.Drills -> DrillsScreen(
+                    contentPadding = contentPadding,
+                    onDrillSelected = { navigate(AppScreen.DrillDetail(it)) },
+                )
+                is AppScreen.DrillDetail -> DrillDetailScreen(
+                    drill = current.drill,
+                    contentPadding = contentPadding,
+                    onStart = { navigate(AppScreen.Workout(current.drill.name)) },
+                )
+                is AppScreen.Workout -> WorkoutScreen(
+                    selectedDrill = current.drillName,
+                    appData = appData,
+                    connectivity = connectivity,
+                    contentPadding = contentPadding,
+                )
+                AppScreen.History -> HistoryScreen(appData, contentPadding)
+                AppScreen.Analytics -> AnalyticsScreen(appData, contentPadding)
+                AppScreen.Goals -> GoalsScreen(appData, contentPadding)
+                AppScreen.Settings -> SettingsScreen(appData, contentPadding)
+            }
         }
+
+        CelebrationOverlay(appData.celebrations.firstOrNull(), onDismiss = appData::dismissCelebration)
     }
 }
 
