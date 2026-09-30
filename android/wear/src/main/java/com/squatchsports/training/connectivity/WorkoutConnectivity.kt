@@ -56,6 +56,7 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
     }
 
     override fun onMessageReceived(event: MessageEvent) {
+        Log.d(COMM_TAG, "watch <- phone  ${event.path}  ${event.data.decodeToString()}")
         mainHandler.post {
             when (event.path) {
                 WorkoutPaths.WORKOUT_STARTED -> {
@@ -87,6 +88,9 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
             .addOnSuccessListener { nodes ->
                 nodes.forEach { node ->
                     messageClient.sendMessage(node.id, path, data)
+                        .addOnSuccessListener {
+                            Log.d(COMM_TAG, "watch -> phone  $path  ${data.decodeToString()}")
+                        }
                         .addOnFailureListener { error ->
                             Log.w(TAG, "Unable to send $path to ${node.displayName}", error)
                         }
@@ -97,5 +101,8 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
 
     private companion object {
         const val TAG = "WorkoutConnectivity"
+
+        /** Filter Logcat by this tag to see every phone/watch message. */
+        const val COMM_TAG = "SquatchComm"
     }
 }
