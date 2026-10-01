@@ -84,7 +84,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA0E88282F33C5570048AD23"
             BuildableName = "Squatch Sports WatchOS Companion Watch App.app"
-            BlueprintName = "Squatch Sports WatchOS Companion Watch App"
             ReferencedContainer = "container:Squatch Sports Basketball Training WatchOS Companion.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,7 +100,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA0E88282F33C5570048AD23"
             BuildableName = "Squatch Sports WatchOS Companion Watch App.app"
-            BlueprintName = "Squatch Sports WatchOS Companion Watch App"
             ReferencedContainer = "container:Squatch Sports Basketball Training WatchOS Companion.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
