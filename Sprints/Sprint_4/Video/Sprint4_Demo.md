@@ -23,7 +23,7 @@ Before recording: open the paired Pixel phone and Wear OS emulators, run the `ap
 
 1. **Android port and Wear OS (slide 4):** Show the Dashboard, open **Drills → Spot Shooting → Start Drill → Start Workout**, and swipe a few shots on the watch (up = make, down = miss, right = swish). Show the counts updating on the phone.
 2. **Streak tracking (slide 5):** Finish the workout. The phone and watch show **"Milestone reached! 7"**. Return to the Dashboard and point out the 7-day calendar and best streak.
-3. **Goal progress (slide 6):** Open **Goals**, tap ✏️ on Daily Shots, set it to 10, finish another short workout, and show the trophy popup and green rings.
+3. **Goal progress (slide 6):** Open **Goals**, tap the edit (pencil) button on Daily Shots, set it to 10, finish another short workout, and show the trophy popup and green rings.
 4. **Watch gamification (slide 7):** Show the watch home screen with the streak and goal rings. In Android Studio, open **Logcat** and filter by `tag:SquatchComm` to show the phone/watch messages.
 5. **XP and levels (slide 8):** Show a recording or screenshots of the iOS Player Progress card and the Level Up alert (recorded on a Mac with Xcode).
 

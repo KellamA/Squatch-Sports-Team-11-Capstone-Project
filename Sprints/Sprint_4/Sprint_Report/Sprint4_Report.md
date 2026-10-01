@@ -48,22 +48,22 @@ Here are links to issues we worked on but did not complete in this sprint:
 
 | iOS/watchOS feature | Android/Wear OS status |
 |---|---|
-| Dashboard | ✅ Done |
-| Drills list and drill details (8 drills) | ✅ Done |
-| Workout screen: start/stop, live counts, Quick Log | ✅ Done |
-| Court positions for each drill | ✅ Done |
-| History | ✅ Done |
-| Analytics | ✅ Done |
-| Goals | ✅ Done (expanded with rings and editing) |
-| Settings | ⚠️ Partial: toggles not saved, watch status is a placeholder |
-| Saving workout data on the phone | ✅ Done |
-| Watch splash screen | ✅ Done |
-| Watch court view with position marker | ✅ Done |
-| Watch swipe shot logging (make, miss, swish) | ✅ Done |
-| Watch tap-to-set position in general workouts | ✅ Done |
-| Watch workout summary by position | ✅ Done |
-| Phone/watch sync: start, stop, shots, drill, position | ✅ Done |
-| Recovery after phone/watch disconnect | ⚠️ Not yet (Sprint 5) |
+| Dashboard | Done |
+| Drills list and drill details (8 drills) | Done |
+| Workout screen: start/stop, live counts, Quick Log | Done |
+| Court positions for each drill | Done |
+| History | Done |
+| Analytics | Done |
+| Goals | Done (expanded with rings and editing) |
+| Settings | Partial: toggles not saved, watch status is a placeholder |
+| Saving workout data on the phone | Done |
+| Watch splash screen | Done |
+| Watch court view with position marker | Done |
+| Watch swipe shot logging (make, miss, swish) | Done |
+| Watch tap-to-set position in general workouts | Done |
+| Watch workout summary by position | Done |
+| Phone/watch sync: start, stop, shots, drill, position | Done |
+| Recovery after phone/watch disconnect | Not yet (Sprint 5) |
 
 ## Testing and Validation
 

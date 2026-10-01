@@ -39,7 +39,7 @@ The first semester built the iOS and watchOS app, which Squatch Sports has relea
 |---|---|
 | Jetpack Compose + Material 3 | Phone user interface |
 | Wear Compose Material 3 | Watch user interface |
-| Google Play services Wearable (Data Layer) | Phone ↔ watch messages and streak/goal sync |
+| Google Play services Wearable (Data Layer) | Phone-to-watch messages and streak/goal sync |
 | AndroidX Core SplashScreen | Watch splash screen |
 | JUnit 4, org.json (tests only) | Unit tests |
 
@@ -47,7 +47,7 @@ The first semester built the iOS and watchOS app, which Squatch Sports has relea
 | Framework | Purpose |
 |---|---|
 | SwiftUI | iPhone and Apple Watch user interface |
-| WatchConnectivity | iPhone ↔ Apple Watch messages |
+| WatchConnectivity | iPhone-to-Apple Watch messages |
 | Combine | Shared app state |
 
 ### Installation Steps
@@ -87,7 +87,7 @@ A typical session:
 3. **Log shots on the watch.** The watch shows a court with the spot to shoot from. Swipe the center pad: **up = make, down = miss, right = swish**. After 5 shots the drill moves to the next spot automatically. The phone's Quick Log buttons can also be used for testing without a watch.
 4. **Finish.** The watch shows a summary by court spot. The phone saves the workout to History and Analytics.
 5. **Celebrate.** If the workout grows your streak or completes a goal, a popup appears on the phone and the watch (with a vibration). On iOS, you earn XP and can level up.
-6. **Adjust goals.** Open **Goals** and tap ✏️ to change daily shots, daily makes, weekly sessions, or target FG%.
+6. **Adjust goals.** Open **Goals** and tap the edit (pencil) button to change daily shots, daily makes, weekly sessions, or target FG%.
 
 Gamification rules (Android):
 * **Streak:** any day with at least one workout counts. One missed day is allowed as a rest day; two missed days in a row reset the current streak. The best streak is kept.
@@ -110,7 +110,7 @@ Gamification rules (Android):
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+5. Submit a pull request
 
 ## Additional Documentation
 
