@@ -5,7 +5,7 @@
 **Client:** Squatch Sports (Mike Niehl, Preston David)
 
 ## YouTube link of Sprint 4 Video (Make this video unlisted)
-* TODO: add unlisted YouTube link
+* https://youtu.be/DzcnNB6Mgj0
 
 ## What's New (User Facing)
 * **Android phone app:** The Squatch Sports app now runs on Android, with the Dashboard, Drills, Drill Details, Workout, History, Analytics, Goals, and Settings screens ported from iOS.
