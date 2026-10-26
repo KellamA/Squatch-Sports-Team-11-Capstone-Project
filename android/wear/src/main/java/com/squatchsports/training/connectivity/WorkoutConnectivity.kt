@@ -133,10 +133,13 @@ class WorkoutConnectivity(context: Context) :
     private fun sendMessage(path: String, data: ByteArray = byteArrayOf()) {
         nodeClient.connectedNodes
             .addOnSuccessListener { nodes ->
+                if (nodes.isEmpty()) {
+                    Log.w(COMM_TAG, "watch -> phone  FAILED: No connected phone nodes found! Ensure emulator pairing (tcp:5601) is active.")
+                }
                 nodes.forEach { node ->
                     messageClient.sendMessage(node.id, path, data)
                         .addOnSuccessListener {
-                            Log.d(COMM_TAG, "watch -> phone  $path  ${data.decodeToString()}")
+                            Log.d(COMM_TAG, "watch -> phone (${node.displayName})  $path  ${data.decodeToString()}")
                         }
                         .addOnFailureListener { error ->
                             Log.w(TAG, "Unable to send $path to ${node.displayName}", error)

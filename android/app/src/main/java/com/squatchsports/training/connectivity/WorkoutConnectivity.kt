@@ -116,11 +116,14 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
     private fun sendBatch(messages: List<Pair<String, ByteArray>>) {
         nodeClient.connectedNodes
             .addOnSuccessListener { nodes ->
+                if (nodes.isEmpty()) {
+                    Log.w(COMM_TAG, "phone -> watch  FAILED: No connected watch nodes found! Ensure emulator pairing (tcp:5601) is active.")
+                }
                 nodes.forEach { node ->
                     messages.forEach { (path, data) ->
                         messageClient.sendMessage(node.id, path, data)
                             .addOnSuccessListener {
-                                Log.d(COMM_TAG, "phone -> watch  $path  ${data.decodeToString()}")
+                                Log.d(COMM_TAG, "phone -> watch (${node.displayName})  $path  ${data.decodeToString()}")
                             }
                             .addOnFailureListener { error ->
                                 Log.w(TAG, "Unable to send $path to ${node.displayName}", error)
