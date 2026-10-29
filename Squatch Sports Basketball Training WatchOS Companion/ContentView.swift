@@ -112,6 +112,8 @@ struct ContentView: View {
                     workoutSummaryView
                 } else if connectivity.workoutActive {
                     activeWorkoutView(for: geometry)
+                } else if let match = connectivity.match {
+                    WatchMatchView(match: match)
                 } else {
                     waitingView
                 }
@@ -682,213 +684,6 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Simplified Court View
-
-private struct SimplifiedCourtView: View {
-    var body: some View {
-        GeometryReader { geo in
-            let width = geo.size.width
-            let height = geo.size.height
-            
-            ZStack {
-                // WOOD FLOOR - Brighter polished look
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.85, green: 0.70, blue: 0.52),
-                                Color(red: 0.78, green: 0.62, blue: 0.45),
-                                Color(red: 0.82, green: 0.66, blue: 0.48)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                // Polished shine overlay
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(0.12),
-                                Color.clear,
-                                Color.white.opacity(0.08)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                
-                // Wood grain lines - smaller planks for watch size
-                ForEach(0..<20, id: \.self) { i in
-                    Rectangle()
-                        .fill(Color.black.opacity(0.08))
-                        .frame(width: 1, height: height)
-                        .position(x: CGFloat(i) * width / 20 + width / 40, y: height / 2)
-                }
-                
-                // Horizontal wood plank lines
-                ForEach(0..<12, id: \.self) { i in
-                    Rectangle()
-                        .fill(Color.black.opacity(0.06))
-                        .frame(width: width, height: 0.5)
-                        .position(x: width / 2, y: CGFloat(i) * height / 12 + height / 24)
-                }
-                
-                // Outer court boundary - WHITE LINES with colored sections
-                // Top edge - GREEN
-                Rectangle()
-                    .fill(Color.green.opacity(0.6))
-                    .frame(width: width, height: 4)
-                    .position(x: width / 2, y: 2)
-                
-                // Bottom edge - RED
-                Rectangle()
-                    .fill(Color.red.opacity(0.6))
-                    .frame(width: width, height: 4)
-                    .position(x: width / 2, y: height - 2)
-                
-                // Left edge - WHITE
-                Rectangle()
-                    .fill(Color.white)
-                    .frame(width: 4, height: height)
-                    .position(x: 2, y: height / 2)
-                
-                // Right edge - PINK
-                Rectangle()
-                    .fill(Color.pink.opacity(0.6))
-                    .frame(width: 4, height: height)
-                    .position(x: width - 2, y: height / 2)
-                
-                // HOOP AT TOP (rim)
-                Circle()
-                    .fill(Color.red.opacity(0.9))
-                    .frame(width: width * 0.095, height: width * 0.095)
-                    .position(x: width / 2, y: height * 0.14)
-                
-                Circle()
-                    .stroke(Color.orange, lineWidth: 2)
-                    .frame(width: width * 0.095, height: width * 0.095)
-                    .position(x: width / 2, y: height * 0.14)
-                
-                // Backboard - More detailed rectangular shape
-                ZStack {
-                    // Main backboard rectangle
-                    Rectangle()
-                        .fill(Color.white.opacity(0.85))
-                        .frame(width: width * 0.24, height: height * 0.055)
-                    
-                    // Border to make it stand out
-                    Rectangle()
-                        .stroke(Color.white, lineWidth: 2)
-                        .frame(width: width * 0.24, height: height * 0.055)
-                    
-                    // Inner box (target square)
-                    Rectangle()
-                        .stroke(Color.white, lineWidth: 1.5)
-                        .frame(width: width * 0.12, height: height * 0.035)
-                }
-                .position(x: width / 2, y: height * 0.085)
-                
-                // Paint area (rectangular, proportional)
-                Rectangle()
-                    .stroke(Color.white, lineWidth: 2)
-                    .frame(width: width * 0.36, height: height * 0.29)
-                    .position(x: width / 2, y: height * 0.26)
-                
-                // Free throw line (matches paint width)
-                Rectangle()
-                    .fill(Color.white)
-                    .frame(width: width * 0.36, height: 2)
-                    .position(x: width / 2, y: height * 0.37)
-                
-                // Large solid semi-circle BELOW the free throw line (bottom half of circle)
-                Circle()
-                    .trim(from: 0.0, to: 0.5)
-                    .stroke(Color.white, lineWidth: 2)
-                    .frame(width: width * 0.36, height: width * 0.36)
-                    .position(x: width / 2, y: height * 0.37)
-                
-                // Dashed semi-circle at TOP of the key (inside the paint, near backboard)
-                Circle()
-                    .trim(from: 0.5, to: 1.0) // Bottom half of circle
-                    .stroke(Color.white, style: StrokeStyle(lineWidth: 2, dash: [3, 2]))
-                    .frame(width: width * 0.36, height: width * 0.36)
-                    .rotationEffect(.degrees(180)) // Flip it so the arc faces down
-                    .position(x: width / 2, y: height * 0.13)
-                
-                // Lane hash marks - Left side
-                ForEach(0..<4, id: \.self) { i in
-                    Rectangle()
-                        .fill(Color.white)
-                        .frame(width: 8, height: 2)
-                        .position(x: width / 2 - width * 0.18, y: height * 0.15 + CGFloat(i) * height * 0.055)
-                }
-                
-                // Lane hash marks - Right side
-                ForEach(0..<4, id: \.self) { i in
-                    Rectangle()
-                        .fill(Color.white)
-                        .frame(width: 8, height: 2)
-                        .position(x: width / 2 + width * 0.18, y: height * 0.15 + CGFloat(i) * height * 0.055)
-                }
-                
-                // THREE-POINT LINE (larger, fills watch properly)
-                Path { path in
-                    let centerX = width / 2
-                    let centerY = height * 0.12
-                    let radius = width * 0.52
-                    
-                    // Arc
-                    path.addArc(
-                        center: CGPoint(x: centerX, y: centerY),
-                        radius: radius,
-                        startAngle: .degrees(38),
-                        endAngle: .degrees(142),
-                        clockwise: false
-                    )
-                    
-                    // Calculate endpoints
-                    let angle = 38.0 * .pi / 180.0
-                    let leftX = centerX - radius * cos(angle)
-                    let leftY = centerY + radius * sin(angle)
-                    let rightX = centerX + radius * cos(angle)
-                    let rightY = centerY + radius * sin(angle)
-                    
-                    // Left corner line UP to top (with spacing)
-                    path.move(to: CGPoint(x: leftX, y: leftY))
-                    path.addLine(to: CGPoint(x: leftX, y: height * 0.06))
-                    
-                    // Right corner line UP to top (with spacing)
-                    path.move(to: CGPoint(x: rightX, y: rightY))
-                    path.addLine(to: CGPoint(x: rightX, y: height * 0.06))
-                }
-                .stroke(Color.white, lineWidth: 2.5)
-                
-                // SQUATCH LOGO at center court with circle background
-                ZStack {
-                    // White circle background
-                    Circle()
-                        .fill(Color.white.opacity(0.85))
-                        .frame(width: width * 0.28, height: width * 0.28)
-                    
-                    // Black ring border
-                    Circle()
-                        .stroke(Color.black, lineWidth: 2)
-                        .frame(width: width * 0.28, height: width * 0.28)
-                    
-                    // Logo
-                    Image("Mascot_BigFoot")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: width * 0.22, height: width * 0.22)
-                }
-                .position(x: width / 2, y: height * 0.78)
-            }
-        }
-    }
-}
-
 // MARK: - Position Marker View (Compact for small watch screen)
 
 private struct PositionMarker: View {
@@ -1066,6 +861,233 @@ private struct WatchCelebrationOverlay: View {
             if !Task.isCancelled, visibleID == id {
                 visibleID = nil
             }
+        }
+    }
+}
+
+// MARK: - 1v1 Match (watch scorekeeping)
+// The iPhone keeps the match and rules; the watch sends plays and shows the iPhone's scoreboard.
+// Page 1 logs your plays, swipe up for page 2 to log your opponent's.
+
+extension PlayerSide {
+    /// Same red and blue as the iPhone match screen.
+    var color: Color {
+        switch self {
+        case .red: Color(red: 0.91, green: 0.22, blue: 0.27)
+        case .blue: Color(red: 0.16, green: 0.47, blue: 0.96)
+        }
+    }
+}
+
+private struct WatchMatchView: View {
+    let match: WatchMatchSnapshot
+    @EnvironmentObject var connectivity: WorkoutConnectivity
+
+    var body: some View {
+        Group {
+            if let winner = match.winner {
+                WatchMatchOverView(match: match, winner: winner, send: send) {
+                    connectivity.clearFinishedMatch()
+                }
+            } else {
+                TabView {
+                    WatchSidePage(match: match, side: match.userSide, phoneReachable: connectivity.isCounterpartReachable, send: send)
+                    WatchSidePage(match: match, side: match.userSide.opponent, phoneReachable: connectivity.isCounterpartReachable, send: send)
+                }
+                .tabViewStyle(.verticalPage)
+            }
+        }
+        .background(Color.black)
+    }
+
+    private func send(_ action: WatchMatchCommand.Action) {
+        connectivity.sendMatchCommand(WatchMatchCommand(matchID: match.matchID, action: action))
+        WKInterfaceDevice.current().play(.click)
+    }
+}
+
+/// Buttons for one player: +1/+2 (or +2/+3), Miss, Foul, and Turnover.
+private struct WatchSidePage: View {
+    let match: WatchMatchSnapshot
+    let side: PlayerSide
+    let phoneReachable: Bool
+    let send: (WatchMatchCommand.Action) -> Void
+
+    private var isUser: Bool { side == match.userSide }
+
+    var body: some View {
+        VStack(spacing: 5) {
+            WatchMatchScoreboard(match: match) {
+                send(.undo)
+            }
+
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(side.color)
+                    .frame(width: 7, height: 7)
+                Text(isUser ? "Your plays" : "\(match.opponentName)'s plays")
+                    .font(.system(size: 11, weight: .semibold))
+                    .lineLimit(1)
+                Spacer()
+                if isUser {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
+                }
+            }
+
+            HStack(spacing: 6) {
+                scoreButton(match.scoring.insidePoints)
+                scoreButton(match.scoring.outsidePoints)
+            }
+
+            HStack(spacing: 4) {
+                smallButton("Miss", systemImage: "arrow.left.arrow.right") { send(.record(.possession(side.opponent))) }
+                smallButton("Foul", systemImage: "hand.raised.fill") { send(.record(.foul(side))) }
+                smallButton("TO", systemImage: "arrow.uturn.left") { send(.record(.turnover(side))) }
+            }
+
+            Text(phoneReachable ? (match.lastPlay ?? "Log your first play") : "iPhone not connected. Plays will sync.")
+                .font(.system(size: 9))
+                .foregroundStyle(phoneReachable ? Color.secondary : Color.orange)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
+        .padding(.horizontal, 4)
+    }
+
+    private func scoreButton(_ points: Int) -> some View {
+        Button {
+            send(.record(.score(side, points: points)))
+        } label: {
+            Text("+\(points)")
+                .font(.system(size: 24, weight: .black, design: .rounded))
+                .frame(maxWidth: .infinity, minHeight: 48)
+                .background(side.color.gradient, in: RoundedRectangle(cornerRadius: 12))
+                .foregroundStyle(.white)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(match.name(for: side)) plus \(points)")
+    }
+
+    private func smallButton(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 1) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 11))
+                Text(title)
+                    .font(.system(size: 9, weight: .semibold))
+            }
+            .frame(maxWidth: .infinity, minHeight: 34)
+            .background(side.color.opacity(0.28), in: RoundedRectangle(cornerRadius: 9))
+            .foregroundStyle(.white)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(match.name(for: side)) \(title == "TO" ? "turnover" : title.lowercased())")
+    }
+}
+
+/// Red vs Blue scores with fouls and a ball next to whoever has it.
+private struct WatchMatchScoreboard: View {
+    let match: WatchMatchSnapshot
+    let onUndo: () -> Void
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Button(action: onUndo) {
+                Image(systemName: "arrow.uturn.backward")
+                    .font(.system(size: 11, weight: .bold))
+                    .frame(width: 24, height: 24)
+                    .background(.white.opacity(0.15), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .disabled(!match.canUndo)
+            .opacity(match.canUndo ? 1 : 0.4)
+            .accessibilityLabel("Undo last play")
+
+            scorePanel(.red)
+            scorePanel(.blue)
+        }
+    }
+
+    private func scorePanel(_ side: PlayerSide) -> some View {
+        let hasBall = match.possession == side
+
+        return VStack(spacing: 0) {
+            HStack(spacing: 2) {
+                Text(match.name(for: side))
+                    .font(.system(size: 9, weight: .semibold))
+                    .lineLimit(1)
+                if hasBall {
+                    Text("🏀")
+                        .font(.system(size: 8))
+                }
+            }
+            Text("\(match.points(for: side))")
+                .font(.system(size: 22, weight: .black, design: .rounded))
+                .monospacedDigit()
+                .contentTransition(.numericText(value: Double(match.points(for: side))))
+            Text("Fouls \(match.fouls(for: side))")
+                .font(.system(size: 8))
+                .foregroundStyle(.white.opacity(0.8))
+        }
+        .foregroundStyle(.white)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 3)
+        .background(side.color.gradient.opacity(hasBall ? 1 : 0.55), in: RoundedRectangle(cornerRadius: 9))
+        .overlay(RoundedRectangle(cornerRadius: 9).stroke(.white.opacity(hasBall ? 0.8 : 0), lineWidth: 1.5))
+        .animation(.easeInOut(duration: 0.2), value: match.points(for: side))
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// Final score with Save (saves the game on the iPhone) and Undo for a mistaken last play.
+private struct WatchMatchOverView: View {
+    let match: WatchMatchSnapshot
+    let winner: PlayerSide
+    let send: (WatchMatchCommand.Action) -> Void
+    let onDone: () -> Void
+
+    private var userWon: Bool { winner == match.userSide }
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 6) {
+                Text(userWon ? "🏆" : "💪")
+                    .font(.system(size: 30))
+                Text(userWon ? "You win!" : "\(match.name(for: winner)) wins!")
+                    .font(.system(size: 18, weight: .black))
+                    .foregroundStyle(winner.color)
+                    .multilineTextAlignment(.center)
+                Text("\(match.points(for: winner)) – \(match.points(for: winner.opponent))")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+
+                Button {
+                    send(.finish)
+                    onDone()
+                } label: {
+                    Text("Save Match")
+                        .font(.system(size: 13, weight: .semibold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(winner.color.gradient, in: RoundedRectangle(cornerRadius: 10))
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(.plain)
+
+                Button("Undo last play") {
+                    send(.undo)
+                }
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 8)
+        }
+        .onAppear {
+            WKInterfaceDevice.current().play(userWon ? .success : .notification)
         }
     }
 }

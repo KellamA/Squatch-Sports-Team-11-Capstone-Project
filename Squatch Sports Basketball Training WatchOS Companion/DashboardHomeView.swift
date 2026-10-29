@@ -67,6 +67,18 @@ struct DashboardHomeView: View {
                             )
                         }
                         .buttonStyle(.plain)
+
+                        NavigationLink {
+                            OneOnOneHomeView()
+                        } label: {
+                            DashboardCard(
+                                title: "1v1",
+                                subtitle: "Play a friend",
+                                systemImage: "person.2.fill"
+                            )
+                        }
+                        .buttonStyle(.plain)
+
                         NavigationLink {
                             HistoryView()
                         } label: {

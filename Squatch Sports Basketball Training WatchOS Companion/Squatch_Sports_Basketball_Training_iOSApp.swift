@@ -2,19 +2,35 @@ import SwiftUI
 
 @main
 struct Squatch_Sports_Basketball_Training_iOSApp: App {
-    @StateObject private var appData = AppDataStore()
+    @StateObject private var appData = AppDataStore(defaults: AppDefaults.current)
+    @StateObject private var oneOnOne = OneOnOneStore.shared
 
     init() {
-        _ = WorkoutConnectivity.shared
+        // Link the 1v1 match to the watch before any UI, so plays from the watch are handled
+        // even when iOS launches the app in the background to deliver them.
+        WatchMatchBridge.connect(store: OneOnOneStore.shared, connectivity: WorkoutConnectivity.shared)
     }
 
     var body: some Scene {
         WindowGroup {
             AppRootView()
                 .environmentObject(appData)
+                .environmentObject(oneOnOne)
                 .environmentObject(WorkoutConnectivity.shared)
         }
     }
+}
+
+enum AppDefaults {
+    /// Where the app saves its data. UI tests launch with `-uiTesting` to start from empty,
+    /// separate storage instead of the user's data.
+    static let current: UserDefaults = {
+        guard CommandLine.arguments.contains("-uiTesting") else { return .standard }
+        let suite = "squatch.uiTesting"
+        let defaults = UserDefaults(suiteName: suite) ?? .standard
+        defaults.removePersistentDomain(forName: suite)
+        return defaults
+    }()
 }
 
 /// Dashboard plus app-wide celebration popups and watch sync.
