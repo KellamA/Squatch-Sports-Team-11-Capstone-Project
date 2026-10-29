@@ -16,11 +16,7 @@ struct iPhoneWorkoutView: View {
     @State private var swishes: Int = 0
     @State private var currentPositionIndex: Int = 0
     @State private var shotsAtCurrentPosition: Int = 0
-    @State private var showXPReward = false
-    @State private var earnedXP = 0
-    @State private var didLevelUp = false
-    @State private var newLevel = 1
-    
+
     private let shotsPerPosition: Int = 5 // Configurable shots per spot for drills
 
     private var totalMakes: Int { makes + swishes }
@@ -245,16 +241,7 @@ struct iPhoneWorkoutView: View {
                 applyWatchValue(v)
             }
         }
-        .alert(didLevelUp ? "🏆 Level Up!" : "🎉 Workout Complete!", isPresented: $showXPReward) {
-            Button("Nice!") { }
-        } message: {
-            if didLevelUp {
-                Text("You earned \(earnedXP) XP and reached Level \(newLevel)!")
-            } else {
-                Text("You earned \(earnedXP) XP! Only \(appData.xpUntilNextLevel) XP until Level \(appData.playerLevel + 1).")
-            }
-        }
-        }
+    }
 
     private func applyWatchValue(_ v: Int) {
         switch v {
@@ -293,24 +280,11 @@ struct iPhoneWorkoutView: View {
         // Send to watch so it updates its shot count
         connectivity.sendValueToPhone(shotType)
     }
-    private func calculateXP(for session: WorkoutSession) -> Int {
-        var xp = 25
-        xp += session.makes
-        xp += session.swishes * 2
-
-        if session.percentage >= 75 {
-            xp += 15
-        }
-
-        return xp
-    }
-    
     private func finishWorkout() {
         let endDate = Date()
 
         if workoutActive && attempts > 0 {
-            let oldLevel = appData.playerLevel
-
+            // Saving queues the XP, streak, and goal popups (see AppDataStore.addSession).
             let session = WorkoutSession(
                 drill: selectedDrill,
                 makes: totalMakes,
@@ -321,14 +295,7 @@ struct iPhoneWorkoutView: View {
                 endDate: endDate
             )
 
-            earnedXP = calculateXP(for: session)
-
             appData.addSession(session)
-
-            newLevel = appData.playerLevel
-            didLevelUp = newLevel > oldLevel
-
-            showXPReward = true
         }
 
         workoutActive = false

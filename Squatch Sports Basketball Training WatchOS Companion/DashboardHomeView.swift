@@ -22,18 +22,27 @@ struct DashboardHomeView: View {
                     }
                     .padding(.top, 8)
 
-                    TodaySummaryCard(
-                        shotsMade: appData.todayMakes,
-                        shotsAttempted: appData.todayAttempts,
-                        sessionsThisWeek: appData.weeklySessionsCompleted
-                    )
-                     
+                    StreakCard(streak: appData.streak, trainingDays: appData.trainingDays)
+
                     PlayerProgressCard(
                         level: appData.playerLevel,
                         currentXP: appData.xpInCurrentLevel,
                         totalXP: appData.totalXP,
                         xpUntilNextLevel: appData.xpUntilNextLevel,
                         progress: appData.levelProgress
+                    )
+
+                    NavigationLink {
+                        GoalsView()
+                    } label: {
+                        TodayGoalsCard(goals: appData.goalProgress)
+                    }
+                    .buttonStyle(.plain)
+
+                    TodaySummaryCard(
+                        shotsMade: appData.todayMakes,
+                        shotsAttempted: appData.todayAttempts,
+                        sessionsThisWeek: appData.weeklySessionsCompleted
                     )
 
                     LazyVGrid(columns: columns, spacing: 14) {

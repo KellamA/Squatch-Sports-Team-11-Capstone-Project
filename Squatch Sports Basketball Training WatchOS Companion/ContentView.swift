@@ -1,4 +1,5 @@
 import SwiftUI
+import WatchKit
 
 // MARK: - Shot Statistics Model
 
@@ -194,6 +195,9 @@ struct ContentView: View {
                 handlePositionComplete()
             }
         }
+        .overlay {
+            WatchCelebrationOverlay(message: connectivity.celebration)
+        }
     }
 
     private func activeWorkoutView(for geometry: GeometryProxy) -> some View {
@@ -292,6 +296,27 @@ struct ContentView: View {
         ZStack {
             Color.black.ignoresSafeArea()
 
+            if let stats = connectivity.stats {
+                ScrollView {
+                    VStack(spacing: 8) {
+                        WatchStatsPanel(stats: stats)
+
+                        Text("Start a workout on your iPhone")
+                            .font(.system(size: 9))
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 12)
+                }
+            } else {
+                waitingMessage
+            }
+        }
+    }
+
+    private var waitingMessage: some View {
+        ZStack {
             VStack(spacing: 8) {
                 Image(systemName: "iphone.radiowaves.left.and.right")
                     .font(.title3)
@@ -453,6 +478,12 @@ struct ContentView: View {
                     Text("Complete!")
                         .font(.system(size: 10))
                         .foregroundStyle(.secondary)
+
+                    if let stats = connectivity.stats, stats.currentStreak > 0 {
+                        Text("🔥 \(stats.currentStreak)-day streak")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Color.watchStreakOrange)
+                    }
                 }
                 .padding(.top, 4)
                 
@@ -880,6 +911,161 @@ private struct PositionMarker: View {
             Circle()
                 .fill(Color.blue)
                 .frame(width: 6, height: 6)
+        }
+    }
+}
+
+// MARK: - Gamification (streak, goals, level, celebrations)
+// Mirrors android/wear/.../GamificationUi.kt.
+
+extension Color {
+    static let watchStreakOrange = Color(red: 1.0, green: 0.584, blue: 0.0)
+    static let watchGoalGreen = Color(red: 0.204, green: 0.78, blue: 0.349)
+}
+
+/// Streak, level, and goal rings shown on the watch while waiting for a workout.
+private struct WatchStatsPanel: View {
+    let stats: WatchStats
+
+    @State private var flameScale: CGFloat = 1
+
+    private var active: Bool { stats.currentStreak > 0 }
+
+    var body: some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 4) {
+                Text("🔥")
+                    .font(.system(size: 22))
+                    .scaleEffect(flameScale)
+                    .grayscale(active ? 0 : 1)
+                    .opacity(active ? 1 : 0.5)
+
+                Text("\(stats.currentStreak)")
+                    .font(.system(size: 26, weight: .black))
+                    .foregroundStyle(active ? Color.watchStreakOrange : .white)
+            }
+
+            Text("day streak • best \(stats.bestStreak)")
+                .font(.system(size: 10))
+                .foregroundStyle(.white.opacity(0.7))
+
+            Text(statusText)
+                .font(.system(size: 9))
+                .foregroundStyle(stats.trainedToday ? Color.watchGoalGreen : .white.opacity(0.55))
+
+            Text("Level \(stats.level) • \(stats.xpInCurrentLevel)/100 XP")
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(.blue)
+
+            HStack(spacing: 10) {
+                ForEach(stats.goals.filter { $0.type != .targetFG }, id: \.type) { goal in
+                    VStack(spacing: 2) {
+                        WatchGoalRing(goal: goal, size: 34)
+                        Text(goal.type.ringLabel)
+                            .font(.system(size: 8))
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
+            }
+            .padding(.top, 6)
+        }
+        .task(id: active) {
+            // Pulse a few times, then stop: endless animations drain the battery.
+            guard active else { return }
+            for _ in 0..<3 {
+                withAnimation(.easeInOut(duration: 0.35)) { flameScale = 1.15 }
+                try? await Task.sleep(for: .milliseconds(350))
+                withAnimation(.easeInOut(duration: 0.35)) { flameScale = 1 }
+                try? await Task.sleep(for: .milliseconds(350))
+            }
+        }
+    }
+
+    private var statusText: String {
+        if !active { return "Log a workout to start one" }
+        return stats.trainedToday ? "Streak is safe today" : "Train today to keep it going"
+    }
+}
+
+private struct WatchGoalRing: View {
+    let goal: GoalProgress
+    let size: CGFloat
+
+    @State private var animatedFraction: Double = 0
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Color.white.opacity(0.15), lineWidth: 4)
+            Circle()
+                .trim(from: 0, to: animatedFraction)
+                .stroke(
+                    goal.isComplete ? Color.watchGoalGreen : Color.watchStreakOrange,
+                    style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                )
+                .rotationEffect(.degrees(-90))
+            Text(goal.isComplete ? "✓" : "\(Int(goal.fraction * 100))%")
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(goal.isComplete ? Color.watchGoalGreen : .white)
+        }
+        .frame(width: size, height: size)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.9)) { animatedFraction = goal.fraction }
+        }
+        .onChange(of: goal.fraction) { _, newValue in
+            withAnimation(.easeOut(duration: 0.9)) { animatedFraction = newValue }
+        }
+    }
+}
+
+/// Full-screen celebration mirrored from the iPhone. Vibrates on arrival; tap or wait to dismiss.
+private struct WatchCelebrationOverlay: View {
+    let message: CelebrationMessage?
+
+    @State private var visibleID: UUID?
+
+    var body: some View {
+        ZStack {
+            if let message, visibleID == message.id {
+                Color.black
+                    .ignoresSafeArea()
+
+                VStack(spacing: 2) {
+                    Text(message.emoji)
+                        .font(.system(size: 34))
+                    Text(message.headline)
+                        .font(.system(size: 28, weight: .black))
+                        .foregroundStyle(Color.watchStreakOrange)
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                    Text(message.caption)
+                        .font(.system(size: 11, weight: .semibold))
+                    Text(message.title)
+                        .font(.system(size: 12, weight: .bold))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 4)
+                    Text(message.subtitle)
+                        .font(.system(size: 9))
+                        .foregroundStyle(.white.opacity(0.65))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                }
+                .padding(.horizontal, 16)
+                .transition(.scale(scale: 0.6).combined(with: .opacity))
+            }
+        }
+        .animation(.spring(response: 0.45, dampingFraction: 0.6), value: visibleID)
+        .contentShape(Rectangle())
+        .allowsHitTesting(visibleID != nil)
+        .onTapGesture { visibleID = nil }
+        .task(id: message?.id) {
+            guard let id = message?.id else { return }
+            visibleID = id
+            WKInterfaceDevice.current().play(.success)
+            try? await Task.sleep(for: .milliseconds(3500))
+            if !Task.isCancelled, visibleID == id {
+                visibleID = nil
+            }
         }
     }
 }

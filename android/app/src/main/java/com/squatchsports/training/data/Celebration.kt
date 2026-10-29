@@ -9,6 +9,15 @@ import com.squatchsports.training.shared.StreakCelebration
 sealed interface Celebration {
     fun toMessage(): CelebrationMessage
 
+    data class Workout(
+        val earnedXp: Int,
+        val newLevel: Int,
+        val leveledUp: Boolean,
+        val xpUntilNextLevel: Int,
+    ) : Celebration {
+        override fun toMessage() = CelebrationMessages.forWorkout(earnedXp, newLevel, leveledUp, xpUntilNextLevel)
+    }
+
     data class Streak(val streak: StreakCelebration) : Celebration {
         override fun toMessage() = CelebrationMessages.forStreak(streak)
     }

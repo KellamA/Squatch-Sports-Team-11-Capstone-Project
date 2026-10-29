@@ -76,23 +76,23 @@ On Windows, use `gradlew.bat`. If Java is not found, point `JAVA_HOME` at Androi
 2. Select the **Squatch Sports Basketball Training WatchOS Companion** scheme and an iPhone simulator paired with an Apple Watch simulator.
 3. Press **Run**. To run the watch app, select the **Squatch Sports WatchOS Companion Watch App** scheme.
 
-**3. Load sample data (Android)**  
-In the phone app, open **Settings → Load Demo History**. This replaces the workout history with a week of sample workouts so streaks, goals, History, and Analytics have data to show.
+**3. Load sample data**  
+In the phone app (Android or iOS), open **Settings → Load Demo History**. This replaces the workout history with a week of sample workouts so streaks, goals, History, and Analytics have data to show.
 
 ## Functionality
 
 A typical session:
-1. **Dashboard.** The phone shows your streak (with a 7-day calendar), progress rings for your goals, and today's stats.
+1. **Dashboard.** The phone shows your streak (with a 7-day calendar), your level and XP, progress rings for your goals, and today's stats.
 2. **Pick a drill.** Open **Drills**, choose one of 8 drills (for example Spot Shooting), read the goal and instructions, and tap **Start Drill**, then **Start Workout**.
 3. **Log shots on the watch.** The watch shows a court with the spot to shoot from. Swipe the center pad: **up = make, down = miss, right = swish**. After 5 shots the drill moves to the next spot automatically. The phone's Quick Log buttons can also be used for testing without a watch.
 4. **Finish.** The watch shows a summary by court spot. The phone saves the workout to History and Analytics.
-5. **Celebrate.** If the workout grows your streak or completes a goal, a popup appears on the phone and the watch (with a vibration). On iOS, you earn XP and can level up.
+5. **Celebrate.** Every workout earns XP (with a level-up popup at each new level). If the workout grows your streak or completes a goal, more popups follow. Each popup appears on the phone and the watch (with a vibration).
 6. **Adjust goals.** Open **Goals** and tap the edit (pencil) button to change daily shots, daily makes, weekly sessions, or target FG%.
 
-Gamification rules (Android):
+Gamification rules (same on Android/Wear OS and iOS/watchOS):
 * **Streak:** any day with at least one workout counts. One missed day is allowed as a rest day; two missed days in a row reset the current streak. The best streak is kept.
 * **Goals:** daily shots, daily makes, weekly sessions, and today's FG% (FG% only counts after 10 shots). Each goal celebrates once per day or week.
-* **XP (iOS):** 25 XP per workout, 1 XP per make, 2 bonus XP per swish, and 15 bonus XP for 75%+ shooting. You level up every 100 XP.
+* **XP:** 25 XP per workout, 1 XP per make, 2 bonus XP per swish, and 15 bonus XP for 75%+ shooting. You level up every 100 XP.
 
 ## Known Problems
 
@@ -101,7 +101,6 @@ Gamification rules (Android):
   * The Settings toggles are not saved, and the watch connection status is a placeholder (`SettingsScreen.kt`).
   * Some drill descriptions list different shots per spot than the app uses. For example, Spot Shooting says 10, while every drill uses 5 (`Drills.kt`).
   * Shots are not queued if the phone and watch disconnect during a workout (`WorkoutConnectivity.kt`).
-* **Gamification differs by platform.** Streaks and goal rings are on Android and Wear OS, and XP and levels are on iOS.
 * **Emulator tip:** if the Android emulator stops responding to mouse clicks, cold boot it from **Device Manager → ⋮ → Cold Boot Now**. The API 37 phone image also logs repeated crashes of a UWB hardware service; this is an emulator issue and does not affect the app.
 
 ## Contributing

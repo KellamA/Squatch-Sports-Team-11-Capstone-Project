@@ -14,8 +14,17 @@ class GamificationPayloadsTest {
                 GoalProgress(GoalType.DAILY_SHOTS, 120, 200),
                 GoalProgress(GoalType.TARGET_FG, 80, 75, eligible = false),
             ),
+            level = 4,
+            xpInCurrentLevel = 35,
         )
         assertEquals(stats, GamificationPayloads.decodeStats(GamificationPayloads.stats(stats)))
+    }
+
+    @Test fun statsWithoutLevelDefaultToLevelOne() {
+        val old = """{"currentStreak":2,"bestStreak":3,"trainedToday":false,"goals":[]}"""
+        val decoded = GamificationPayloads.decodeStats(old.encodeToByteArray())!!
+        assertEquals(1, decoded.level)
+        assertEquals(0, decoded.xpInCurrentLevel)
     }
 
     @Test fun celebrationRoundTrip() {

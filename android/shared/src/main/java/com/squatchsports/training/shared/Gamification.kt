@@ -35,14 +35,36 @@ object CelebrationMessages {
             }
         },
     )
+
+    /** XP popup shown after every saved workout; becomes a level-up popup when a new level is reached. */
+    fun forWorkout(earnedXp: Int, newLevel: Int, leveledUp: Boolean, xpUntilNextLevel: Int): CelebrationMessage =
+        if (leveledUp) {
+            CelebrationMessage(
+                emoji = "⭐️",
+                headline = "Level $newLevel",
+                caption = "level up",
+                title = "Level Up!",
+                subtitle = "You earned $earnedXp XP and reached Level $newLevel!",
+            )
+        } else {
+            CelebrationMessage(
+                emoji = "🎉",
+                headline = "+$earnedXp",
+                caption = "XP earned",
+                title = "Workout Complete!",
+                subtitle = "Only $xpUntilNextLevel XP until Level ${newLevel + 1}.",
+            )
+        }
 }
 
-/** Streak and goal snapshot the phone syncs to the watch. */
+/** Streak, goal, and level snapshot the phone syncs to the watch. */
 data class WatchStats(
     val currentStreak: Int,
     val bestStreak: Int,
     val trainedToday: Boolean,
     val goals: List<GoalProgress>,
+    val level: Int = 1,
+    val xpInCurrentLevel: Int = 0,
 )
 
 object GamificationPayloads {
@@ -50,6 +72,8 @@ object GamificationPayloads {
         .put("currentStreak", stats.currentStreak)
         .put("bestStreak", stats.bestStreak)
         .put("trainedToday", stats.trainedToday)
+        .put("level", stats.level)
+        .put("xpInCurrentLevel", stats.xpInCurrentLevel)
         .put(
             "goals",
             JSONArray().apply {
@@ -79,6 +103,9 @@ object GamificationPayloads {
                 val type = GoalType.entries.firstOrNull { it.name == goal.getString("type") } ?: return@mapNotNull null
                 GoalProgress(type, goal.getInt("current"), goal.getInt("target"), goal.getBoolean("eligible"))
             },
+            // Optional so a watch still reads stats saved by an older phone build.
+            level = json.optInt("level", 1),
+            xpInCurrentLevel = json.optInt("xpInCurrentLevel", 0),
         )
     }.getOrNull()
 
