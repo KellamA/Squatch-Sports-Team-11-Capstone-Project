@@ -46,10 +46,12 @@ import com.squatchsports.training.connectivity.CelebrationEvent
 import com.squatchsports.training.shared.GoalProgress
 import com.squatchsports.training.shared.GoalType
 import com.squatchsports.training.shared.WatchStats
+import com.squatchsports.training.shared.XpCalculator
 import kotlinx.coroutines.delay
 
 private val StreakOrange = Color(0xFFFF9500)
 private val GoalGreen = Color(0xFF34C759)
+private val LevelBlue = Color(0xFF0A84FF)
 private const val WATCH_CELEBRATION_MILLIS = 3500L
 
 /** Streak and goal rings shown on the watch while waiting for a workout. */
@@ -98,6 +100,12 @@ fun WatchStatsPanel(stats: WatchStats) {
             },
             color = if (stats.trainedToday) GoalGreen else Color.White.copy(alpha = 0.55f),
             fontSize = 9.sp,
+        )
+        Text(
+            "Level ${stats.level} • ${stats.xpInCurrentLevel}/${XpCalculator.XP_PER_LEVEL} XP",
+            color = LevelBlue,
+            fontSize = 9.sp,
+            fontWeight = FontWeight.SemiBold,
         )
 
         Row(

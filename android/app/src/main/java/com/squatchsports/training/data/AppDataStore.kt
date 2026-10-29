@@ -14,6 +14,7 @@ import com.squatchsports.training.shared.StreakCalculator
 import com.squatchsports.training.shared.StreakResult
 import com.squatchsports.training.shared.WatchStats
 import com.squatchsports.training.shared.WorkoutSession
+import com.squatchsports.training.shared.XpCalculator
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.LocalDate
@@ -49,10 +50,20 @@ class AppDataStore(context: Context) {
         sessions.addAll(readSessions())
     }
 
+    /** Saves a workout and queues its popups: XP earned (or level up), then streak, then goals. */
     fun addSession(session: WorkoutSession) {
         val before = streak
+        val levelBefore = playerLevel
         sessions.add(0, session)
         persistSessions()
+        celebrations.add(
+            Celebration.Workout(
+                earnedXp = XpCalculator.xpFor(session),
+                newLevel = playerLevel,
+                leveledUp = playerLevel > levelBefore,
+                xpUntilNextLevel = xpUntilNextLevel,
+            ),
+        )
         StreakCalculator.celebrationFor(before, streak)?.let { celebrations.add(Celebration.Streak(it)) }
         celebrateCompletedGoals()
     }
@@ -139,8 +150,16 @@ class AppDataStore(context: Context) {
                 bestStreak = current.best,
                 trainedToday = current.lastTrainingDay == LocalDate.now(),
                 goals = goalProgress,
+                level = playerLevel,
+                xpInCurrentLevel = xpInCurrentLevel,
             )
         }
+
+    val totalXp: Int get() = XpCalculator.totalXp(sessions)
+    val playerLevel: Int get() = XpCalculator.level(totalXp)
+    val xpInCurrentLevel: Int get() = XpCalculator.xpInCurrentLevel(totalXp)
+    val xpUntilNextLevel: Int get() = XpCalculator.xpUntilNextLevel(totalXp)
+    val levelProgress: Float get() = xpInCurrentLevel.toFloat() / XpCalculator.XP_PER_LEVEL
 
     val trainingDays: Set<LocalDate>
         get() = sessions.map { StreakCalculator.toLocalDate(it.endDateMillis) }.toSet()

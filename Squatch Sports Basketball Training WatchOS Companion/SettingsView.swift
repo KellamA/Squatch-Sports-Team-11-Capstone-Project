@@ -33,6 +33,17 @@ struct SettingsView: View {
             }
 
             Section("Data") {
+                Button {
+                    appData.loadDemoHistory()
+                } label: {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Load Demo History")
+                        Text("Replaces history with 6 workouts from the past week (for testing streaks)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Button("Clear All History", role: .destructive) {
                     appData.clearAllSessions()
                 }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Settings
@@ -27,14 +28,18 @@ import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.squatchsports.training.data.AppDataStore
+import com.squatchsports.training.shared.XpCalculator
 
 @Composable
 fun DashboardScreen(
@@ -64,6 +69,14 @@ fun DashboardScreen(
         }
 
         StreakCard(appData.streak, appData.trainingDays)
+
+        PlayerProgressCard(
+            level = appData.playerLevel,
+            currentXp = appData.xpInCurrentLevel,
+            totalXp = appData.totalXp,
+            xpUntilNextLevel = appData.xpUntilNextLevel,
+            progress = appData.levelProgress,
+        )
 
         TodayGoalsCard(appData.goalProgress, onClick = onGoals)
 
@@ -116,6 +129,54 @@ private fun TodaySummaryCard(shotsMade: Int, shotsAttempted: Int, sessionsThisWe
         }
     }
 }
+
+/** Level and XP progress, matching PlayerProgressCard on iOS. */
+@Composable
+private fun PlayerProgressCard(level: Int, currentXp: Int, totalXp: Int, xpUntilNextLevel: Int, progress: Float) {
+    MaterialCard {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("Player Progress", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text("Level $level", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            }
+            Icon(
+                Icons.Default.EmojiEvents,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                tint = LevelGold,
+            )
+        }
+        Spacer(Modifier.height(14.dp))
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp),
+        )
+        Spacer(Modifier.height(10.dp))
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                "$currentXp / ${XpCalculator.XP_PER_LEVEL} XP",
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                "$xpUntilNextLevel XP to Level ${level + 1}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.height(4.dp))
+        Text(
+            "Total XP: $totalXp",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+private val LevelGold = Color(0xFFFFCC00)
 
 @Composable
 private fun SummaryStat(value: String, label: String, modifier: Modifier = Modifier) {
