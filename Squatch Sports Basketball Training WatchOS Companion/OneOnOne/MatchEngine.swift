@@ -118,7 +118,8 @@ nonisolated struct OneOnOneMatch: Codable, Equatable, Identifiable {
     var startDate = Date()
     var endDate: Date?
 
-    init(opponent: Friend, userSide: PlayerSide, settings: MatchSettings) {
+    init(id: UUID = UUID(), opponent: Friend, userSide: PlayerSide, settings: MatchSettings) {
+        self.id = id
         self.opponentID = opponent.id
         self.opponentName = opponent.name
         self.userSide = userSide

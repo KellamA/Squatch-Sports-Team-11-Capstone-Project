@@ -21,6 +21,29 @@ struct OneOnOneHomeView: View {
                     .listRowBackground(Color.clear)
             }
 
+            Section {
+                NavigationLink {
+                    NearbyPlayersView()
+                        .environmentObject(store)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "person.2.wave.2.fill")
+                            .font(.title3)
+                            .foregroundStyle(.blue)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Nearby 1v1")
+                                .font(.headline)
+
+                            Text("Connect to another player nearby")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+
             if let match = store.activeMatch {
                 Section("Match in progress") {
                     Button {
@@ -253,9 +276,17 @@ private struct MatchHistoryRow: View {
     }
 }
 
+
+
 #Preview {
     NavigationStack {
         OneOnOneHomeView()
-            .environmentObject(OneOnOneStore(defaults: UserDefaults(suiteName: "OneOnOneHomePreview")!))
+            .environmentObject(
+                OneOnOneStore(
+                    defaults: UserDefaults(
+                        suiteName: "OneOnOneHomePreview"
+                    )!
+                )
+            )
     }
 }
