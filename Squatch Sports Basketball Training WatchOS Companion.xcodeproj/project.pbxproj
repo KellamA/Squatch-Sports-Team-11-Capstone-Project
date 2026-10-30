@@ -683,6 +683,8 @@
 				DEVELOPMENT_TEAM = B8QLYC5T9U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBonjourServices = "_squatch-1v1._tcp";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Squatch Sports uses the local network to connect nearby players for 1v1 matches.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -715,6 +717,8 @@
 				DEVELOPMENT_TEAM = B8QLYC5T9U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBonjourServices = "_squatch-1v1._tcp";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Squatch Sports uses the local network to connect nearby players for 1v1 matches.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

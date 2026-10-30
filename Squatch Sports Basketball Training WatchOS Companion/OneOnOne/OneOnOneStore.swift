@@ -34,6 +34,13 @@ final class OneOnOneStore: ObservableObject {
     /// to send the new scoreboard (see WatchMatchBridge.swift).
     var onActiveMatchChange: (() -> Void)?
 
+    /// Nearby 1v1 callbacks. Local actions are sent to the other iPhone.
+    /// Remote actions use the Remote methods below so they are not echoed back.
+    var onLocalMatchEvent: ((UUID, MatchEvent) -> Void)?
+    var onLocalUndo: ((UUID) -> Void)?
+    var onLocalFinish: ((UUID) -> Void)?
+    var onLocalCancel: ((UUID) -> Void)?
+
     /// Your name on the scoreboard.
     @Published var playerName: String {
         didSet {
@@ -87,29 +94,86 @@ final class OneOnOneStore: ObservableObject {
 
     // MARK: - Matches
 
-    func startMatch(against opponent: Friend, userSide: PlayerSide, settings: MatchSettings) {
-        activeMatch = OneOnOneMatch(opponent: opponent, userSide: userSide, settings: settings)
+    func startMatch(
+        id: UUID = UUID(),
+        against opponent: Friend,
+        userSide: PlayerSide,
+        settings: MatchSettings
+    ) {
+        activeMatch = OneOnOneMatch(
+            id: id,
+            opponent: opponent,
+            userSide: userSide,
+            settings: settings
+        )
     }
 
     func record(_ event: MatchEvent) {
-        activeMatch?.record(event)
+        guard let matchID = activeMatch?.id else { return }
+
+        let recorded = activeMatch?.record(event) ?? false
+
+        if recorded {
+            onLocalMatchEvent?(matchID, event)
+        }
+    }
+
+    /// Applies a play received from the other iPhone without sending it back.
+    func recordRemote(_ event: MatchEvent, matchID: UUID) {
+        guard activeMatch?.id == matchID else { return }
+        _ = activeMatch?.record(event)
     }
 
     func undoLastEvent() {
+        guard let matchID = activeMatch?.id,
+              !(activeMatch?.events.isEmpty ?? true) else { return }
+
+        activeMatch?.undo()
+        onLocalUndo?(matchID)
+    }
+
+    /// Applies an undo received from the other iPhone without echoing it back.
+    func undoRemote(matchID: UUID) {
+        guard activeMatch?.id == matchID else { return }
         activeMatch?.undo()
     }
 
     /// Saves a finished match to history and clears it. Unfinished matches are discarded instead.
     func finishMatch() {
         guard let match = activeMatch else { return }
+
         if match.state.isOver {
             matches.insert(match, at: 0)
         }
+
+        let matchID = match.id
+        activeMatch = nil
+        onLocalFinish?(matchID)
+    }
+
+    /// Finishes a match because the other iPhone finished it.
+    func finishRemote(matchID: UUID) {
+        guard let match = activeMatch,
+              match.id == matchID else { return }
+
+        if match.state.isOver {
+            matches.insert(match, at: 0)
+        }
+
         activeMatch = nil
     }
 
     /// Ends the current match without saving it.
     func cancelMatch() {
+        guard let matchID = activeMatch?.id else { return }
+
+        activeMatch = nil
+        onLocalCancel?(matchID)
+    }
+
+    /// Cancels because the other nearby iPhone ended the match.
+    func cancelRemote(matchID: UUID) {
+        guard activeMatch?.id == matchID else { return }
         activeMatch = nil
     }
 

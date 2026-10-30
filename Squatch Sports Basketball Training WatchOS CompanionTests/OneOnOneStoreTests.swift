@@ -1,3 +1,4 @@
+import XCTest
 //
 //  OneOnOneStoreTests.swift
 //  Squatch Sports Basketball Training WatchOS CompanionTests
@@ -81,5 +82,123 @@ struct OneOnOneStoreTests {
         store.removeFriend(kaleb)
         #expect(store.friends.isEmpty)
         #expect(store.matches.first?.opponentName == "Kaleb")
+    }
+}
+
+// MARK: - Nearby 1v1 Sync Tests
+
+extension OneOnOneStoreTests {
+
+    func testNearbyMatchUsesSharedMatchID() {
+        let defaults = UserDefaults(
+            suiteName: "OneOnOneStoreTests.NearbySharedID.\(UUID())"
+        )!
+
+        let store = OneOnOneStore(defaults: defaults)
+        let friend = Friend(name: "Melvin")
+        let sharedID = UUID()
+
+        store.startMatch(
+            id: sharedID,
+            against: friend,
+            userSide: .red,
+            settings: MatchSettings()
+        )
+
+        XCTAssertEqual(store.activeMatch?.id, sharedID)
+        XCTAssertEqual(store.activeMatch?.userSide, .red)
+        XCTAssertEqual(store.activeMatch?.opponentName, "Melvin")
+    }
+
+    func testRemoteEventDoesNotEchoBack() {
+        let defaults = UserDefaults(
+            suiteName: "OneOnOneStoreTests.RemoteEvent.\(UUID())"
+        )!
+
+        let store = OneOnOneStore(defaults: defaults)
+        let friend = Friend(name: "Melvin")
+        let sharedID = UUID()
+
+        store.startMatch(
+            id: sharedID,
+            against: friend,
+            userSide: .red,
+            settings: MatchSettings()
+        )
+
+        var echoedEventCount = 0
+
+        store.onLocalMatchEvent = { _, _ in
+            echoedEventCount += 1
+        }
+
+        store.recordRemote(
+            .score(.blue, points: 1),
+            matchID: sharedID
+        )
+
+        XCTAssertEqual(store.activeMatch?.state.blue.points, 1)
+        XCTAssertEqual(echoedEventCount, 0)
+    }
+
+    func testRemoteUndoDoesNotEchoBack() {
+        let defaults = UserDefaults(
+            suiteName: "OneOnOneStoreTests.RemoteUndo.\(UUID())"
+        )!
+
+        let store = OneOnOneStore(defaults: defaults)
+        let friend = Friend(name: "Melvin")
+        let sharedID = UUID()
+
+        store.startMatch(
+            id: sharedID,
+            against: friend,
+            userSide: .red,
+            settings: MatchSettings()
+        )
+
+        store.recordRemote(
+            .score(.red, points: 1),
+            matchID: sharedID
+        )
+
+        var echoedUndoCount = 0
+
+        store.onLocalUndo = { _ in
+            echoedUndoCount += 1
+        }
+
+        store.undoRemote(matchID: sharedID)
+
+        XCTAssertEqual(store.activeMatch?.state.red.points, 0)
+        XCTAssertEqual(echoedUndoCount, 0)
+    }
+
+    func testRemoteCancelClearsMatchWithoutEcho() {
+        let defaults = UserDefaults(
+            suiteName: "OneOnOneStoreTests.RemoteCancel.\(UUID())"
+        )!
+
+        let store = OneOnOneStore(defaults: defaults)
+        let friend = Friend(name: "Melvin")
+        let sharedID = UUID()
+
+        store.startMatch(
+            id: sharedID,
+            against: friend,
+            userSide: .red,
+            settings: MatchSettings()
+        )
+
+        var echoedCancelCount = 0
+
+        store.onLocalCancel = { _ in
+            echoedCancelCount += 1
+        }
+
+        store.cancelRemote(matchID: sharedID)
+
+        XCTAssertNil(store.activeMatch)
+        XCTAssertEqual(echoedCancelCount, 0)
     }
 }
