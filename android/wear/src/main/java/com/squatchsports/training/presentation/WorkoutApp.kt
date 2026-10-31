@@ -91,7 +91,9 @@ fun WearWorkoutApp(connectivity: WorkoutConnectivity) {
     }
 
     Box(Modifier.fillMaxSize()) {
+        val match = connectivity.matchUpdate?.match
         when {
+            match != null -> WatchMatchScreen(match, connectivity)
             state.showSummary -> WorkoutSummaryScreen(state, connectivity.stats)
             connectivity.workoutActive -> ActiveWorkoutScreen(state, connectivity.workoutActive)
             else -> WaitingScreen(connectivity.stats)

@@ -19,6 +19,13 @@ import com.google.android.gms.wearable.Wearable
 import com.squatchsports.training.shared.CelebrationMessage
 import com.squatchsports.training.shared.CourtPosition
 import com.squatchsports.training.shared.GamificationPayloads
+import com.squatchsports.training.shared.MatchCommandAction
+import com.squatchsports.training.shared.MatchCommandOutbox
+import com.squatchsports.training.shared.MatchEvent
+import com.squatchsports.training.shared.MatchPaths
+import com.squatchsports.training.shared.MatchPayloads
+import com.squatchsports.training.shared.WatchMatchCommand
+import com.squatchsports.training.shared.WatchMatchUpdate
 import com.squatchsports.training.shared.WatchStats
 import com.squatchsports.training.shared.WorkoutPaths
 import com.squatchsports.training.shared.WorkoutPayloads
@@ -35,6 +42,61 @@ class WorkoutConnectivity(context: Context) :
     private val nodeClient = Wearable.getNodeClient(context.applicationContext)
     private val dataClient = Wearable.getDataClient(context.applicationContext)
     private val mainHandler = Handler(Looper.getMainLooper())
+
+    private val preferences = context.applicationContext.getSharedPreferences("squatch_match_sync", Context.MODE_PRIVATE)
+    private val outbox = MatchCommandOutbox(
+        saved = preferences.getString("outbox", null)?.let { MatchPayloads.decodeCommands(it.encodeToByteArray()) } ?: emptyList(),
+        persist = { check(preferences.edit().putString("outbox", MatchPayloads.commands(it).decodeToString()).commit()) },
+    )
+    var matchUpdate by mutableStateOf(preferences.getString("match", null)?.let { MatchPayloads.decodeUpdate(it.encodeToByteArray()) })
+        private set
+    var pendingMatchCommands by mutableIntStateOf(outbox.pending.size)
+        private set
+    var phoneConnected by mutableStateOf(false)
+        private set
+    val hasPendingFinish: Boolean get() = outbox.pending.any { it.action == MatchCommandAction.FINISH }
+
+    private val refreshConnection = object : Runnable {
+        override fun run() {
+            nodeClient.connectedNodes.addOnSuccessListener { nodes ->
+                val reconnected = !phoneConnected && nodes.isNotEmpty()
+                phoneConnected = nodes.isNotEmpty()
+                if (reconnected || (phoneConnected && outbox.pending.isNotEmpty())) {
+                    loadSavedMatch()
+                    sendMessage(MatchPaths.REQUEST)
+                    publishMatchCommands()
+                }
+            }.addOnFailureListener { phoneConnected = false }
+            mainHandler.postDelayed(this, 5_000)
+        }
+    }
+
+    fun sendMatchCommand(action: MatchCommandAction, event: MatchEvent? = null) {
+        val match = matchUpdate?.match ?: return
+        outbox.enqueue(WatchMatchCommand(match.matchId, action, event))
+        pendingMatchCommands = outbox.pending.size
+        publishMatchCommands()
+    }
+
+    private fun publishMatchCommands() {
+        // Chunk large offline games; the next chunk is published after application acknowledgement.
+        val data = MatchPayloads.commands(outbox.pending.take(100))
+        dataClient.putDataItem(PutDataRequest.create(MatchPaths.COMMANDS).setData(data).setUrgent())
+            .addOnFailureListener { Log.w(TAG, "Match plays remain queued for retry", it) }
+    }
+
+    internal fun applyMatchUpdate(data: ByteArray) {
+        val update = MatchPayloads.decodeUpdate(data) ?: return
+        mainHandler.post {
+            if (update.revision < (matchUpdate?.revision ?: -1L)) return@post
+            check(preferences.edit().putString("match", data.decodeToString()).commit())
+            val before = outbox.pending
+            outbox.acknowledge(update)
+            matchUpdate = update
+            pendingMatchCommands = outbox.pending.size
+            if (outbox.pending != before) publishMatchCommands()
+        }
+    }
 
     /** Latest streak/goal snapshot from the phone, or null until one arrives. */
     var stats by mutableStateOf<WatchStats?>(null)
@@ -57,16 +119,29 @@ class WorkoutConnectivity(context: Context) :
         messageClient.addListener(this)
         dataClient.addListener(this)
         loadSavedStats()
+        loadSavedMatch()
+        sendMessage(MatchPaths.REQUEST)
+        publishMatchCommands()
+        mainHandler.removeCallbacks(refreshConnection)
+        mainHandler.post(refreshConnection)
     }
 
     fun stopListening() {
         messageClient.removeListener(this)
         dataClient.removeListener(this)
+        mainHandler.removeCallbacks(refreshConnection)
+    }
+
+    private fun loadSavedMatch() {
+        val uri = Uri.Builder().scheme(PutDataRequest.WEAR_URI_SCHEME).authority("*").path(MatchPaths.STATE).build()
+        dataClient.getDataItems(uri).addOnSuccessListener { items ->
+            try { items.forEach { it.data?.let(::applyMatchUpdate) } } finally { items.release() }
+        }.addOnFailureListener { Log.w(TAG, "Unable to read saved match", it) }
     }
 
     /** Reads the stats the phone last published, so the watch shows them right away on launch. */
     private fun loadSavedStats() {
-        val uri = Uri.Builder().scheme(PutDataRequest.WEAR_URI_SCHEME).path(WorkoutPaths.STATS).build()
+        val uri = Uri.Builder().scheme(PutDataRequest.WEAR_URI_SCHEME).authority("*").path(WorkoutPaths.STATS).build()
         dataClient.getDataItems(uri).addOnSuccessListener { items ->
             items.forEach { item -> item.data?.let(::applyStats) }
             items.release()
@@ -76,8 +151,11 @@ class WorkoutConnectivity(context: Context) :
     override fun onDataChanged(events: DataEventBuffer) {
         events.forEach { event ->
             val item = event.dataItem
-            if (event.type == DataEvent.TYPE_CHANGED && item.uri.path == WorkoutPaths.STATS) {
-                item.data?.let(::applyStats)
+            if (event.type == DataEvent.TYPE_CHANGED) {
+                when (item.uri.path) {
+                    WorkoutPaths.STATS -> item.data?.let(::applyStats)
+                    MatchPaths.STATE -> item.data?.let(::applyMatchUpdate)
+                }
             }
         }
     }

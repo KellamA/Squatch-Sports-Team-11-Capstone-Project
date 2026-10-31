@@ -47,6 +47,7 @@ fun DashboardScreen(
     contentPadding: PaddingValues,
     onStartWorkout: () -> Unit,
     onDrills: () -> Unit,
+    onOneOnOne: () -> Unit,
     onHistory: () -> Unit,
     onAnalytics: () -> Unit,
     onGoals: () -> Unit,
@@ -85,6 +86,13 @@ fun DashboardScreen(
             shotsAttempted = appData.todayAttempts,
             sessionsThisWeek = appData.weeklySessionsCompleted,
         )
+
+        Card(onClick = onOneOnOne, modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("1v1", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text("Play a friend · Keep score on your phone or watch")
+            }
+        }
 
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             DashboardRow {
