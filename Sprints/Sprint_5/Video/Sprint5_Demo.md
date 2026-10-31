@@ -4,7 +4,7 @@
 
 **Pending team recording and unlisted upload.** Insert the actual YouTube URL here and in the Sprint 5 report after upload. Repository merges do not imply that a video has been recorded or submitted.
 
-Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 16 slides contain speaker notes; a text copy is in [Sprint5_Presenter_Notes.md](../PPT/Sprint5_Presenter_Notes.md).
+Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 15 slides contain speaker notes; a text copy is in [Sprint5_Presenter_Notes.md](../PPT/Sprint5_Presenter_Notes.md).
 
 ## Current completion status
 
@@ -15,7 +15,7 @@ Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 16 slides co
 
 ## Suggested run of show (~12–14 minutes)
 
-These are planning estimates, not an existing recording. The slides are intentionally minimal, but the full closeout and upcoming tasks remain visible on slides 9–10. Use the speaker notes for explanation and allow extra time for live demos. The speaker-note timing totals about ten to eleven minutes; reserve another two to three minutes for demonstrations.
+These are planning estimates, not an existing recording. The separate Sprint 5 Closeout slide is removed. Sprint 6 ownership remains visible on slide 9, and the remaining Sprint 5 tasks are on the required Next Steps slide (14). Use the speaker notes for explanation and allow extra time for live demos. The speaker-note timing totals about ten minutes; reserve another two to three minutes for demonstrations.
 
 | Template section | Slides | Suggested presenter | Show / explain |
 |---|---|---|---|
@@ -25,13 +25,13 @@ These are planning estimates, not an existing recording. The slides are intentio
 | Features/Demo | 5 | Kaleb | Team-tested nearby iPhone match and paired-watch updates |
 | Features/Demo | 6 | Kellam | Android/Wear OS demo and Nearby flow |
 | Deployment & Testing | 7 | Kellam | 121 JVM checks, last clean 13 UI checks and two APKs |
-| Kanban | 8–10 | Melvin | Delivered features, full Sprint 5 closeout and Sprint 6 backlog; Kellam owns #36 and #37 |
-| Client Meetings | 11 | Kaleb | Sep 30 and Oct 14 minutes; Oct 28 cancelled |
-| Report | 12 | Kaleb | Report, MoMs, evidence and recording status |
-| AI | 13 | Melvin | Assistance, human review and verification |
-| Achievements & Challenges | 14 | Team | Delivered features and lessons learned |
-| Next Steps | 15 | Kellam | Android hardware validation, player feedback and handoff |
-| Conclusion | 16 | Kellam | Recap, acknowledge Squatch Sports, invite feedback |
+| Kanban | 8–9 | Melvin | Delivered features and Sprint 6 backlog; Kellam owns #36 and #37 |
+| Client Meetings | 10 | Kaleb | Sep 30 and Oct 14 minutes; Oct 28 cancelled |
+| Report | 11 | Kaleb | Report, MoMs, evidence and recording status |
+| AI | 12 | Melvin | Assistance, human review and verification |
+| Achievements & Challenges | 13 | Team | Delivered features and lessons learned |
+| Next Steps | 14 | Kellam | Remaining Sprint 5 testing, client rollout, report/video and board reconciliation tasks |
+| Conclusion | 15 | Kellam | Recap, acknowledge Squatch Sports, invite feedback |
 
 ## Android / Wear OS live demo (slide 6)
 

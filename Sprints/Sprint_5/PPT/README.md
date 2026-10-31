@@ -3,8 +3,8 @@
 ## Ready to use
 
 - **Deck:** [Sprint5_Review.pptx](Sprint5_Review.pptx)
-- **Slide overview:** [Slide_Overview.png](Slide_Overview.png) — native QuickLook renders of all 16 slides.
-- **Speaker scripts:** [Sprint5_Presenter_Notes.md](Sprint5_Presenter_Notes.md) — also embedded in all 16 slides.
+- **Slide overview:** [Slide_Overview.png](Slide_Overview.png) — native QuickLook renders of all 15 slides.
+- **Speaker scripts:** [Sprint5_Presenter_Notes.md](Sprint5_Presenter_Notes.md) — also embedded in all 15 slides.
 - **Recording plan:** [../Video/Sprint5_Demo.md](../Video/Sprint5_Demo.md)
 - **Build/test screenshot:** [../Testing/Android_Test_Results.png](../Testing/Android_Test_Results.png)
 - **Verification and handoff text:** [../Testing/Android_Verification.md](../Testing/Android_Verification.md)
@@ -19,7 +19,7 @@
 
 ## Minimal layout and required order
 
-This revision has **16 slides**, keeping the minimal visual style without dropping the backlog. Shorter titles, larger text, three-point feature summaries and simple Kanban tables replace dense status explanations. The complete Sprint 5 closeout and Sprint 6 task lists are visible on separate slides; only technical detail, source attribution, testing limits and demo instructions move into the notes. Kellam remains the owner shown for #36 and #37; the ordinary **MERGED** badge matches the other merged objectives.
+This revision has **15 slides**. The separate Sprint 5 Closeout slide has been removed. Completed deliverables and Sprint 6 ownership stay in Kanban (slides 8–9); the remaining Sprint 5 tasks stay visible in the required Next Steps section (slide 14). Shorter titles, larger text, three-point feature summaries and simple tables keep the deck minimal without hiding the backlog. Technical detail, source attribution, testing limits and demo instructions remain in the notes. Kellam remains the owner shown for #36 and #37; the ordinary **MERGED** badge matches the other merged objectives.
 
 The deck starts from the actual Sprint 4 PowerPoint package: same 16:9 size, master/layout, orange/charcoal palette, dark cover/conclusion, header hierarchy, cards, and team-oriented feature sections. Arial provides consistent rendering on macOS without requiring Calibri. The cover uses the app's existing Squatch Sports wordmark and mascot.
 
@@ -29,15 +29,15 @@ The deck starts from the actual Sprint 4 PowerPoint package: same 16:9 size, mas
 | Objectives | 2 |
 | Features/Demo | 3–6 |
 | Deployment & Testing | 7 |
-| Kanban | 8–10 |
-| Client Meetings | 11 |
-| Report | 12 |
-| AI | 13 |
-| Achievements & Challenges | 14 |
-| Next Steps | 15 |
-| Conclusion | 16 |
+| Kanban | 8–9 |
+| Client Meetings | 10 |
+| Report | 11 |
+| AI | 12 |
+| Achievements & Challenges | 13 |
+| Next Steps | 14 |
+| Conclusion | 15 |
 
-The saved package is checked for 16 slides, notes on every slide, the exact required section order, valid ZIP contents and in-bounds shapes. All slides are also rendered with macOS QuickLook and visually reviewed. This is native presentation-import validation, not a claim of testing inside Microsoft PowerPoint itself.
+The saved package is checked for 15 slides, notes on every slide, the exact required section order, valid ZIP contents and in-bounds shapes. All slides are also rendered with macOS QuickLook and visually reviewed. This is native presentation-import validation, not a claim of testing inside Microsoft PowerPoint itself.
 
 ## Sources and evidence
 
