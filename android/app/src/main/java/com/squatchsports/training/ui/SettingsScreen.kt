@@ -25,10 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.squatchsports.training.connectivity.WorkoutConnectivity
 import com.squatchsports.training.data.AppDataStore
 
 @Composable
-fun SettingsScreen(appData: AppDataStore, contentPadding: PaddingValues) {
+fun SettingsScreen(appData: AppDataStore, contentPadding: PaddingValues, connectivity: WorkoutConnectivity) {
     var notificationsEnabled by rememberSaveable { mutableStateOf(true) }
     var soundEnabled by rememberSaveable { mutableStateOf(true) }
     var watchSyncEnabled by rememberSaveable { mutableStateOf(true) }
@@ -55,11 +56,11 @@ fun SettingsScreen(appData: AppDataStore, contentPadding: PaddingValues) {
         SettingsSection("Watch Status") {
             SettingsValueRow(
                 label = "Connection",
-                value = if (watchSyncEnabled) "Connected" else "Disconnected",
-                valueColor = if (watchSyncEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                value = if (connectivity.watchConnected) "Connected" else "Disconnected",
+                valueColor = if (connectivity.watchConnected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             )
             HorizontalDivider()
-            SettingsValueRow("Last Sync", "Just now")
+            SettingsValueRow("1v1 Sync", "Automatic (Data Layer)")
         }
 
         SettingsSection("Data") {

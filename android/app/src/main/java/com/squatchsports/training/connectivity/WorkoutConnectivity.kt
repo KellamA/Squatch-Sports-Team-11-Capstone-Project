@@ -1,6 +1,10 @@
 package com.squatchsports.training.connectivity
 
 import android.content.Context
+import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,6 +15,10 @@ import com.google.android.gms.wearable.Wearable
 import com.squatchsports.training.shared.CelebrationMessage
 import com.squatchsports.training.shared.CourtPosition
 import com.squatchsports.training.shared.GamificationPayloads
+import com.squatchsports.training.shared.MatchPaths
+import com.squatchsports.training.shared.MatchPayloads
+import com.squatchsports.training.shared.WatchMatchCommand
+import com.squatchsports.training.shared.WatchMatchUpdate
 import com.squatchsports.training.shared.WatchStats
 import com.squatchsports.training.shared.WorkoutPaths
 import com.squatchsports.training.shared.WorkoutPayloads
@@ -31,12 +39,48 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
     var currentDrill: String? = null
         private set
 
+    var onMatchCommands: ((List<WatchMatchCommand>) -> Unit)? = null
+    var onMatchRequest: (() -> Unit)? = null
+    var watchConnected by mutableStateOf(false)
+        private set
+
+    private val connectionCheck = object : Runnable {
+        override fun run() {
+            nodeClient.connectedNodes.addOnSuccessListener { watchConnected = it.isNotEmpty() }
+                .addOnFailureListener { watchConnected = false }
+            mainHandler.postDelayed(this, 5_000)
+        }
+    }
+
     fun startListening() {
         messageClient.addListener(this)
+        mainHandler.removeCallbacks(connectionCheck)
+        mainHandler.post(connectionCheck)
+        onMatchRequest?.invoke()
     }
 
     fun stopListening() {
         messageClient.removeListener(this)
+        mainHandler.removeCallbacks(connectionCheck)
+    }
+
+    /** Also used by explicit resync requests: retrying identical DataItems alone doesn't fire DATA_CHANGED. */
+    fun loadPendingMatchCommands() {
+        val uri = Uri.Builder().scheme(PutDataRequest.WEAR_URI_SCHEME).authority("*").path(MatchPaths.COMMANDS).build()
+        dataClient.getDataItems(uri).addOnSuccessListener { items ->
+            try { items.forEach { it.data?.let(::receiveMatchCommands) } } finally { items.release() }
+        }.addOnFailureListener { Log.w(TAG, "Unable to read pending match plays", it) }
+    }
+
+    fun receiveMatchCommands(data: ByteArray) {
+        val commands = MatchPayloads.decodeCommands(data)?.takeIf { it.isNotEmpty() } ?: return
+        runCatching { onMatchCommands?.invoke(commands) }
+            .onFailure { Log.w(TAG, "Match plays were not acknowledged; watch will retry", it) }
+    }
+
+    fun publishMatch(update: WatchMatchUpdate) {
+        val request = PutDataRequest.create(MatchPaths.STATE).setData(MatchPayloads.update(update)).setUrgent()
+        dataClient.putDataItem(request).addOnFailureListener { Log.w(TAG, "Unable to publish match", it) }
     }
 
     fun addShotListener(listener: (Int) -> Unit) {
@@ -90,6 +134,7 @@ class WorkoutConnectivity(context: Context) : MessageClient.OnMessageReceivedLis
         Log.d(COMM_TAG, "phone <- watch  ${event.path}  ${event.data.decodeToString()}")
         mainHandler.post {
             when (event.path) {
+                MatchPaths.REQUEST -> onMatchRequest?.invoke()
                 WorkoutPaths.WORKOUT_STARTED -> workoutActive = true
                 WorkoutPaths.WORKOUT_STOPPED -> {
                     workoutActive = false
