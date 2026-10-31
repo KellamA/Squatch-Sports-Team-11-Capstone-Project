@@ -4,7 +4,7 @@
 
 **Pending team recording and unlisted upload.** Insert the actual YouTube URL here and in the Sprint 5 report after upload. Repository merges do not imply that a video has been recorded or submitted.
 
-Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 17 slides contain speaker notes; a text copy is in [Sprint5_Presenter_Notes.md](../PPT/Sprint5_Presenter_Notes.md).
+Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 16 slides contain speaker notes; a text copy is in [Sprint5_Presenter_Notes.md](../PPT/Sprint5_Presenter_Notes.md).
 
 ## Current completion status
 
@@ -15,25 +15,25 @@ Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 17 slides co
 
 ## Suggested run of show (~12–14 minutes)
 
-These are planning estimates, not an existing recording. Allow extra time when switching to live demos.
+These are planning estimates, not an existing recording. The slides are intentionally minimal, but the full closeout and upcoming tasks remain visible on slides 9–10. Use the speaker notes for explanation and allow extra time for live demos. The speaker-note timing totals about ten to eleven minutes; reserve another two to three minutes for demonstrations.
 
 | Template section | Slides | Suggested presenter | Show / explain |
 |---|---|---|---|
-| Intro | 1–2 | Kellam | Project, team, client goal and responsibilities |
-| Objectives | 3 | Kellam | Parity, Apple 1v1, Kaleb's completed nearby work and the merged Android port |
-| Features / Demo | 4–5 | Melvin | iPhone rules, friends/records, watch input and gamification parity |
-| Features / Demo | 6 | Kaleb | Team-tested nearby iPhone match and paired-watch updates |
-| Features / Demo | 7–8 | Kellam | Android/Wear OS demo, Nearby screen and host/guest recovery |
-| Deployment & Testing | 9 | Kellam | 121 JVM checks, last clean 13 emulator checks, merge proof and remaining Android hardware testing |
-| Kanban | 10–11 | Melvin | Closed #32 / merged #38, team-confirmed Kaleb completion and separate open tickets |
-| Client Meetings | 12 | Kaleb | Sep 30 and Oct 14 minutes; Oct 28 was cancelled |
-| Report | 13 | Kaleb | Report, MoMs, evidence and real video-link status |
-| AI | 14 | Melvin | Assistance, review and accountability; distinguish team confirmations from assistant-run tests |
-| Achievements & Challenges | 15 | Team | Delivered features, ordering/recovery, toolchain and round-watch constraints |
-| Next Steps | 16 | Kellam | Android physical testing, rollout, recording and Sprint 6 backlog |
-| Conclusion | 17 | Kellam | Recap, acknowledge Squatch Sports, invite feedback |
+| Intro | 1 | Kellam | Project, team, client goal and responsibilities |
+| Objectives | 2 | Kellam | Parity, phone/watch 1v1, nearby iPhone play and Android port |
+| Features/Demo | 3–4 | Melvin | iPhone rules, friends/records, watch input and gamification parity |
+| Features/Demo | 5 | Kaleb | Team-tested nearby iPhone match and paired-watch updates |
+| Features/Demo | 6 | Kellam | Android/Wear OS demo and Nearby flow |
+| Deployment & Testing | 7 | Kellam | 121 JVM checks, last clean 13 UI checks and two APKs |
+| Kanban | 8–10 | Melvin | Delivered features, full Sprint 5 closeout and Sprint 6 backlog; Kellam owns #36 and #37 |
+| Client Meetings | 11 | Kaleb | Sep 30 and Oct 14 minutes; Oct 28 cancelled |
+| Report | 12 | Kaleb | Report, MoMs, evidence and recording status |
+| AI | 13 | Melvin | Assistance, human review and verification |
+| Achievements & Challenges | 14 | Team | Delivered features and lessons learned |
+| Next Steps | 15 | Kellam | Android hardware validation, player feedback and handoff |
+| Conclusion | 16 | Kellam | Recap, acknowledge Squatch Sports, invite feedback |
 
-## Android / Wear OS live demo (slide 7)
+## Android / Wear OS live demo (slide 6)
 
 Before recording:
 - Pull the merged `main`, build the debug phone/watch apps, and open both in paired Pixel and Wear OS emulators.
@@ -53,11 +53,11 @@ The captured real-app paired-emulator smoke verified the scoring directions and 
 
 ## Nearby segments
 
-### Kaleb — iPhone (slide 6)
+### Kaleb — iPhone (slide 5)
 
 Present the nearby flow as **tested and complete**, as confirmed by the team: discover/connect, share one match ID and opposite player sides, log plays, undo, finish/cancel and keep both paired watches updated. Use Kaleb's verified demonstration or recording. Do not attribute that verification to the Android test command or invent additional test-run metrics.
 
-### Kellam — Android (slide 8)
+### Kellam — Android (slide 6)
 
 - Show **1v1 → Nearby Players**, the permission explanation, code comparison and host/guest design.
 - Physical discovery/connection still needs **two real Android phones** running the updated app, with Google Play services, Bluetooth/Wi-Fi and requested permissions. Older Android versions also require Location enabled.
@@ -65,7 +65,7 @@ Present the nearby flow as **tested and complete**, as confirmed by the team: di
 - Until physical Android testing is collected, demonstrate the screen/architecture and clearly identify that radio acceptance as pending. A serialized two-peer unit test is not a physical connection demo.
 - No Android–iPhone shared game: iOS uses MultipeerConnectivity, while Android uses Google Nearby Connections.
 
-## Evidence for slide 9
+## Evidence for slide 7
 
 - [Build/test screenshot](../Testing/Android_Test_Results.png)
 - [Raw Gradle output](../Testing/Android_Build_Test_Results.txt)

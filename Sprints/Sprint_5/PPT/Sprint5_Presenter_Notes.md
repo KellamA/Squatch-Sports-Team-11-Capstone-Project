@@ -1,106 +1,109 @@
 # Sprint 5 presenter notes
 
-Layout: Sprint 4 deck; content order follows the requested video template.
-Evidence distinguishes verified Android merge status, team-confirmed Kaleb completion, and remaining Android hardware/deployment checks.
+Minimal 16-slide review. The full closeout and upcoming task lists stay visible; technical detail, source attribution and live-demo cues remain in the notes.
 
-## Slide 1 — Kellam (~20s)
+Required order: Intro → Objectives → Features/Demo → Deployment & Testing → Kanban → Client Meetings → Report → AI → Achievements & Challenges → Next Steps → Conclusion
 
-Welcome to Team 11’s Sprint 5 review. We are Kellam, Melvin, and Kaleb, building the Squatch Sports basketball training app. This sprint adds 1v1 scorekeeping and nearby play while aligning the major features across the Apple and Android apps. The cover uses the project’s existing Squatch Sports branding; the feature slides include genuine current emulator captures.
+## Slide 1 — Intro · Kellam (~45s)
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; Sprints/Sprint_4/PPT/Sprint4_Review.pptx
+We are Team 11: Kellam, Melvin and Kaleb. Squatch Sports helps basketball players choose drills on a phone, log makes, misses and swishes on a watch, and review their progress. The client calls the motivation goal “hide the broccoli”: make useful training habits enjoyable. Sprint 5 adds friendly 1v1 competition and aligns the major features across Apple and Android. Melvin handled parity and the iPhone/Apple Watch foundation, Kaleb built nearby iPhone games, and Kellam ported the feature to Android and Wear OS.
 
-## Slide 2 — Kellam (~35s)
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md
 
-The core app is still shooting practice: select a drill, log shots on the watch, and review saved progress. The client wants useful logging to feel enjoyable. We split the sprint so Melvin built the iOS/watchOS foundation and gamification parity, Kaleb connected nearby iPhones, and I ported the 1v1 and nearby flows to Android and Wear OS. Each platform now covers the same main capabilities, but this is not a claim of identical behavior or mixed-platform multiplayer.
+## Slide 2 — Objectives · Kellam (~35s)
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/MoM/MoM_2026-09-30.md
+Our goals were gamification parity, phone/watch 1v1, nearby competition and the Android/Wear OS port. The Android work is merged into main through PR 38 and issue 32 is closed. Kaleb’s nearby iPhone feature is considered tested and complete based on Kellam’s team confirmation. These are completed implementation goals; Android Nearby hardware acceptance and client rollout remain separate next steps. The two ecosystems still do not play one mixed Android–iPhone match.
 
-## Slide 3 — Kellam (~40s)
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/38; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32
 
-We had four goals: close the gamification split from Sprint 4, build 1v1 on iPhone and Apple Watch, connect nearby players, and bring the same major flows to Android and Wear OS. Kaleb’s nearby iPhone feature is tested and complete based on Kellam’s current team confirmation. The Android/Wear OS implementation is now merged into main through PR 38, and issue 32 is closed. Android Nearby physical-device validation and client rollout remain separate next steps. The team-confirmed Apple completion is not being presented as a new iOS test run by this assistant.
+## Slide 3 — Features/Demo · Melvin (~55s)
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/27; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/28; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/29; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/30; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32
+The iPhone 1v1 mode lets users add friends, select Red or Blue, choose 1s/2s or 2s/3s, target score, win by two, make-it-take-it and first possession. It tracks baskets, fouls, turnovers, steals and ball possession. A match is an event log, so replay computes the state and undo removes the last event. A paused match survives closing the app; a saved finished match updates overall and head-to-head records. Possession-based restrictions on which player may log actions are planned in issue 25. The visual is a diagram, not an iOS device screenshot.
 
-## Slide 4 — Melvin (~55s)
+**Demo cue:** Show setup, log a basket and foul, undo, then finish/save a short game.
 
-The base 1v1 feature keeps a list of events instead of changing scores in several places. Replaying that list computes points, possession and the winner, so undo is just removing the last event. Friends and records are saved locally and a paused match survives closing the app. Demo: add a friend, choose the rules, log a basket, a foul and a steal, undo, and save a short finished match. The diagram is illustrative. Possession-based restrictions on who may log which actions are not implemented yet; that is issue 25.
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/24; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/28; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/24; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/28; Squatch Sports Basketball Training WatchOS Companion/OneOnOne/MatchEngine.swift; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25
+## Slide 4 — Features/Demo · Melvin (~50s)
 
-## Slide 5 — Melvin (~50s)
+Gamification was split by platform in Sprint 4: Android had streaks/goals and iOS had XP. Sprint 5 brings the same major gamification rules and celebrations to both platforms. The watch has big scoring buttons, your/opponent pages, Miss, Foul, Turnover, Undo and Save. The phone applies the official rules and sends back the scoreboard. Apple Watch requests the active game on open or reconnect, fixing the waiting-screen issue found in simulator testing. Steals remain phone-only. Apple Watch workout-driven keep-alive is Sprint 6 work assigned to Kellam in this presentation.
 
-Streaks and goals were Android-first in Sprint 4, while XP and levels were iOS-first. This sprint brings those rules and celebrations to both ecosystems. On the watch, the user has big scoring buttons, a second page for the opponent, Miss, Foul, Turnover, Undo and Save. The phone remains responsible for applying rules and sends the confirmed scoreboard back. The Apple Watch now requests the active game when it opens or reconnects, fixing a waiting-screen problem found in simulator testing. Steals are still phone-only, and HealthKit-driven auto-launch/keep-alive is future work.
+**Demo cue:** Show the paired Apple Watch score, log a play and show the phone update; briefly show the gamification progress.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/27; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/29; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/36; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md
 
-## Slide 6 — Kaleb (~50s)
+## Slide 5 — Features/Demo · Kaleb (~55s)
 
-Kaleb built and tested nearby discovery and shared 1v1 between two iPhones using Apple’s MultipeerConnectivity. The same game ID and settings are installed on both phones, but each player has the opposite local side. Plays, undo, finish and cancellation are forwarded without echoing remote actions, and each phone keeps its own paired watch updated. For this revised review, Kaleb’s feature is considered tested and complete based on Kellam’s explicit team confirmation. That confirmation supersedes the feature’s pending-testing wording in the original draft; no new Swift test counts or independent physical-device measurements are being invented. GitHub ticket 31 is still open and is tracked separately for board reconciliation.
+Nearby iPhone play uses Apple MultipeerConnectivity. Both phones share a match ID and settings, but use opposite local player sides. Scoring, fouls, turnovers, steals, possession, undo, finish and cancel sync without echoing remote events. Each phone continues updating its own paired Apple Watch. The feature is tested and complete per Kellam’s current team confirmation; this is not a new assistant-run iOS test session. Follow-up ticket 31 is still open on GitHub and needs board reconciliation separately from the confirmed feature status. No new Swift test counts or latency measurements are claimed.
+
+**Demo cue:** Use Kaleb’s team-tested nearby iPhone demonstration: connect, start, log plays on both phones and show paired-watch updates.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/26; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/30; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/31; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md
 
-## Slide 7 — Kellam (~95s)
+## Slide 6 — Features/Demo · Kellam (~65s)
 
-The Android port includes the match engine, durable repository, friends, match setup, the live court, records, undo, save and pause/resume. Wear OS supports your plays and the opponent’s plays, plus Undo and Save. Commands are saved before sending and removed only after acknowledgement; the phone saves the processed IDs with the match so retries cannot add points twice. Demonstrate Dashboard → 1v1 → Add Friend → Play → Start, then score from the watch, undo a play and save. The screenshots are genuine current emulator captures from a temporary demo game. The Android implementation is merged into GitHub main through PR 38 (merge commit c4b0c76), and issue 32 is closed. This is not a claim that every screen on every watch has been validated.
+The Android/Wear OS port is merged in PR 38 and issue 32 is closed. Shared Kotlin code contains the rules, persistence, records and event replay, while Compose supplies friends/setup/court and watch controls. Wear OS commands are saved before sending, and persisted IDs prevent duplicate scoring. Nearby Android play uses encrypted Google Nearby Connections with code confirmation on both phones. The connecting phone hosts; guest phone/watch commands queue until the host acknowledges them. Tests cover duplicate/dropped replies, stale snapshots, reconnects and restarts. The screenshots are genuine current emulator captures of a temporary 4–2 fixture, later discarded without saving a record. The round watch is scrollable; not all controls fit at once. Android Nearby radio validation on physical phones remains pending. There is no Android-to-iPhone interoperability.
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32; android/shared/src/main/java/com/squatchsports/training/shared/MatchEngine.kt; android/shared/src/main/java/com/squatchsports/training/shared/OneOnOneRepository.kt; android/README.md
+**Demo cue:** Phone: Dashboard → 1v1 → Add Friend → Play → Start. Watch +2; phone opponent +2; watch +2 then Undo; finish/save a short game. Briefly show Nearby Players and its permission/code-confirmation flow. Allow 75–90 seconds for the live segment.
 
-## Slide 8 — Kellam (~60s)
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/38; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32; android/README.md; Sprints/Sprint_5/Testing/Android_Verification.md
 
-Android cannot use Apple’s MultipeerConnectivity. I implemented Android-to-Android play with Google Nearby Connections and explicit code confirmation on both phones. The connecting phone is the host. Guest phone and watch commands are queued durably and ordered at that host; confirmed snapshots update the other phone and both watches. Tests simulate duplicates, dropped replies, reconnects and process restarts. Demo only what is verified: show the Nearby Players screen and permission explanation, then use physical phones for an actual discovery/connection demo only after testing it. Cross-platform iPhone-to-Android games require an iOS transport change or shared backend. This sprint does not provide that interoperability.
+## Slide 7 — Deployment & Testing · Kellam (~55s)
 
-Sources: android/shared/src/main/java/com/squatchsports/training/shared/NearbyMatchCoordinator.kt; android/app/src/main/java/com/squatchsports/training/nearby/NearbyMatchService.kt; android/README.md#nearby-1v1-two-android-phones
+The requested Gradle command, ./gradlew :app:assembleDebug :wear:assembleDebug testDebugUnitTest, passed on merged Android code and was repeated with --rerun-tasks for fresh execution. JUnit XML reports 121 passing JVM tests with no failures/errors. The last clean UI run had nine phone and four Wear OS tests passing; its actual timestamps are retained. Both debug APKs were produced. In the actual paired emulator apps, watch-to-phone scoring, phone-to-watch scoring, watch Undo and cancellation/clearing also worked. These results do not prove physical Android Nearby radio behavior or real-device latency. Client distribution/accounts and collected player feedback remain follow-ups. Kaleb’s iPhone status is team-confirmed rather than derived from these Android results. The report-ready screenshot and raw logs are linked in the notes.
 
-## Slide 9 — Kellam (~50s)
+Sources: Sprints/Sprint_5/Testing/Android_Test_Results.png; Sprints/Sprint_5/Testing/Android_Build_Test_Results.txt; Sprints/Sprint_5/Testing/Android_Test_Results.json; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34
 
-The requested Gradle command succeeds for both debug APKs and Android unit tests. A forced rerun avoids relying only on up-to-date tasks. The XML results contain 121 passing JVM tests across shared and app modules with zero failures/errors. The additional emulator runs contain nine phone and four Wear OS UI tests, all passing. The screenshot is an evidence page generated from the captured Gradle output and test XML, not a fabricated terminal screen. Kaleb’s nearby iPhone feature is now team-confirmed tested and complete; the Android verification did not rerun Swift tests or produce new Apple test counts. The Android code is merged in PR 38. Android Nearby radio validation, latency measurements and client distribution remain separate from these automated results.
+## Slide 8 — Kanban · Melvin (~35s)
 
-Sources: Sprints/Sprint_5/Testing/Android_Verification.md; Sprints/Sprint_5/Testing/Android_Build_Test_Results.txt; Sprints/Sprint_5/Testing/Android_Test_Results.json; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34
-
-## Slide 10 — Melvin (~35s)
-
-Melvin owns 18 labeled points across parity, iPhone 1v1 and Apple Watch scoring. Kaleb’s five-point nearby feature is complete, with testing confirmed by Kellam. Kellam’s eight-point Android port is now merged through PR 38, which closed issue 32. These merged/closed statuses have been verified on GitHub. The team confirmation of Kaleb’s testing is distinguished from Android test evidence collected here; no additional Swift test counts are claimed.
+All five listed implementation tickets are closed. Melvin owns the parity, iPhone 1v1 and Apple Watch implementation work: 5 + 8 + 5 story points. Kaleb’s nearby implementation is five points and is tested/complete per team confirmation. Kellam’s Android port is eight points, merged through PR 38 which closed issue 32. Pull request IDs and full acceptance details stay in these notes instead of cluttering the table.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/27; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/28; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/29; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/30; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32
 
-## Slide 11 — Melvin (~30s)
+## Slide 9 — Kanban · Melvin (~35s)
 
-Kaleb’s nearby feature is considered complete based on Kellam’s confirmation. GitHub ticket 31 remains open and was not automatically closed by the Android merge, so the table distinguishes team completion from its current ticket state. Remaining team work includes Android hardware evidence, user feedback, client deployment and the video package. Sprint 6 includes possession restrictions, Apple Watch workout keep-alive and duplicate-file cleanup. Apple Watch issue 19 and platform-specific polish remain tracked.
+These Sprint 5 closeout items remain visible rather than being hidden in the notes. Issue 33 covers system/integration checks, latency and user feedback. Issue 34 covers physical devices and client TestFlight/Play internal testing. Issue 35 includes the report, meeting minutes, slides and actual recorded demo/video link; the presentation does not imply the video has been uploaded. Kaleb’s nearby feature is considered tested and complete per Kellam’s confirmation. The existing GitHub ticket 31 is still open, so its remaining presentation item is reconciling the board with that confirmed completion, not claiming the feature is untested.
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/31; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/35; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/36; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/37; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/19
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/31; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/35
 
-## Slide 12 — Kaleb (~35s)
+## Slide 10 — Kanban · Melvin (~35s)
 
-The September 30 meeting set the goals: gamification parity and a new 1v1 mode, built on the Apple platforms first and then ported to Android. At the October 14 design review, the team emphasized keeping the current court design, prioritizing watch input, and connecting each player’s own phone. Online accounts were left for later. The October 28 meeting was cancelled, so it must not be presented as a completed meeting. The minutes are provided on Melvin’s documentation branch.
+The upcoming work stays visible: player/possession restrictions, Apple Watch workout keep-alive, duplicate-file cleanup and the older repeated-shot bug. Kellam owns issues 36 and 37 in this presentation as requested; the slide edit does not change GitHub assignee fields. Android/Wear OS UI, regression polish and the remaining edge cases also stay tracked under issue 20. The full Sprint 5 closeout work is on the previous slide so the backlog can be read without dense text or hiding tasks in the notes.
+
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/36; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/37; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/19; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/20
+
+## Slide 11 — Client Meetings · Kaleb (~35s)
+
+The September 30 Sprint 4 demo/planning meeting set parity and 1v1 as the next goals, with Apple implementation first and Android/Wear OS porting afterward. The October 14 review emphasized wrist input, preserving the existing court, and letting each player use their own phone. Online accounts were left for later. October 28 was cancelled and is not counted as a held meeting. Melvin’s documentation branch contains both minutes.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/MoM/MoM_2026-09-30.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/MoM/MoM_2026-10-14.md
 
-## Slide 13 — Kaleb (~25s)
+## Slide 12 — Report · Kaleb (~30s)
 
-Melvin prepared the report and meeting minutes on commit 86171e9 of melvin-sprint5-docs. This revised presentation updates that draft with the Android merge in PR 38 and Kellam’s confirmation that Kaleb’s nearby feature is tested and complete. Reconcile any older pending/local-only wording in the report with these statuses. The recording plan and per-slide notes are ready; the actual video URL and player-feedback evidence still depend on the team producing them. This presentation has not been recorded, uploaded as a video or submitted.
+The report and meeting minutes were sourced from Melvin’s documentation branch, commit 86171e9. That draft predates the Android merge and latest team confirmation, so reconcile its old pending/local-only wording before submission. The Android verification package includes the screenshot, actual Gradle logs, JSON summaries and APK hashes. The presentation and speaker scripts are ready. The recording and actual unlisted video URL still need to be produced; no course submission, upload or client release is being claimed.
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/tree/melvin-sprint5-docs/Sprints/Sprint_5/MoM; Sprints/Sprint_5/PPT/README.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/35
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/tree/melvin-sprint5-docs/Sprints/Sprint_5/MoM; Sprints/Sprint_5/Testing/Android_Verification.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/35
 
-## Slide 14 — Melvin (~40s)
+## Slide 13 — AI · Melvin (~45s)
 
-AI coding tools helped port features, draft automated tests, diagnose SDK/compiler errors and create this presentation/evidence package. The team chose the rules, design and acceptance criteria. Automated Android checks and paired-emulator smoke provide evidence for the port; they do not prove Android physical radio behavior. Kaleb’s iPhone testing is reported as complete based on Kellam’s team confirmation, rather than being mislabeled as a new assistant-run Swift test session. The team remains accountable for final content, hardware acceptance and release approval.
+AI coding tools accelerated Swift-to-Kotlin porting, feature implementation, tests and diagnosis of emulator/toolchain issues. AI also helped organize this deck and the evidence package. Humans chose the gameplay rules, team split, watch UX and acceptance standards. A build or generated test alone cannot prove real-device radio behavior; the team reviews code and tests it in context. Kaleb’s iPhone testing is team-provided confirmation, distinct from the Android tests reproduced here. We remain responsible for the result and for completing the outstanding hardware and release checks.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; Sprints/Sprint_5/Testing/Android_Verification.md
 
-## Slide 15 — Team (~45s)
+## Slide 14 — Achievements & Challenges · Team (~45s)
 
-The main achievement is a complete path from training and gamification into 1v1 competition on phones and watches. Android’s nearby coordinator handles duplicate commands, out-of-order snapshots, reconnects and process restarts. We also encountered an SDK release compiled with newer Kotlin metadata, so the Android project pins a compatible Nearby version instead of bypassing compiler checks. Round watches need careful layout testing; the match controls use paging and scrolling, but this is not a claim that every screen has been polished on every device. Kaleb’s nearby feature is team-confirmed complete. Android physical Nearby testing, client deployment and collected user feedback remain the unfinished validation tasks.
+The achievement is a full path from training and rewards into phone/watch 1v1 and nearby competition within each platform. Ordering guest commands at one host, saving IDs and replaying event logs handle duplicate and delayed plays. The Android SDK mismatch was solved by pinning a Nearby release compatible with the project’s Kotlin compiler rather than bypassing checks. Round watches require large controls plus scrolling/paging; we are not claiming that every screen is validated on every device. Kaleb’s feature is complete per team confirmation. Android physical Nearby checks, latency, client distribution and collected user feedback remain the key unfinished acceptance work.
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; android/gradle/libs.versions.toml; android/README.md
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; android/README.md; android/gradle/libs.versions.toml
 
-## Slide 16 — Kellam (~40s)
+## Slide 15 — Next Steps · Kellam (~40s)
 
-The Android port is already merged and issue 32 is closed; Kaleb’s nearby feature is considered tested and complete as confirmed by Kellam. Before submission, finalize the report wording, record the demo and add the real unlisted URL. Next, validate Android Nearby on physical phones/watches, collect latency and user feedback, and prepare client distribution. Sprint 6 focuses on possession restrictions, Apple Watch workout keep-alive, cleanup, regression and handoff. Android-to-iPhone interoperability is separate future work.
+The implementation is already merged, so the next work is acceptance and handoff rather than another Android publishing task. Test Android Nearby with two real phones and paired watches, record latency/reconnect behavior, collect actual player feedback and coordinate TestFlight/Play internal distribution with the client. Rehearse and record this sprint review, add the unlisted link and reconcile the report. Sprint 6 ownership is shown in the Kanban slide: Kaleb handles possession restrictions, and Kellam handles Apple Watch keep-alive plus repository cleanup. Mixed Android–iPhone games require a shared transport or backend and are not delivered here.
 
-Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/31; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/36; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/37
+Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/35; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/25; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/36; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/37
 
-## Slide 17 — Kellam (~20s)
+## Slide 16 — Conclusion · Kellam (~20s)
 
-To recap: Sprint 5 aligns major training and gamification features, adds 1v1 on phones and watches, and implements nearby games separately for Apple and Android. The Android port is merged in PR 38 and its automated checks pass. Kaleb’s nearby feature is team-confirmed tested and complete. Android physical Nearby acceptance and client rollout remain open. Thank you to Mike and Preston at Squatch Sports and to everyone reviewing the project. We welcome questions and feedback.
+Sprint 5 aligns the major feature set, adds 1v1 on phones and watches, and enables nearby games within each platform ecosystem. The Android port is merged; Kaleb’s nearby feature is tested and complete per team confirmation. Android hardware acceptance and client rollout are next. Thank you to Mike and Preston at Squatch Sports. We welcome questions and feedback.
 
 Sources: https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/melvin-sprint5-docs/Sprints/Sprint_5/Sprint_Report/Sprint5_Report.md; https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project
