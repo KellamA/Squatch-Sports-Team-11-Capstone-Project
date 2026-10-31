@@ -12,15 +12,14 @@
 * **1v1 match mode (iPhone):** Add friends, set up a match with street rules (1s and 2s or 2s and 3s, play to a target score, win by 2, make it take it, coin flip for first ball), and keep score on a Red vs Blue scoreboard drawn on top of the training court. Track points, fouls, turnovers, steals, and possession, undo mistakes, and see your win/loss record against each friend.
 * **1v1 scorekeeping on the Apple Watch:** When a match starts on the iPhone, the watch shows big +1/+2 (or +2/+3), Miss, Foul, and Turnover buttons for your side, with a second page for your opponent. The iPhone updates instantly, and plays logged while the phone is out of range sync when it reconnects.
 * **Nearby 1v1 between two iPhones:** Two players can find each other nearby, start one shared match, and each log plays from their own phone.
-* TODO (Kellam): 1v1 on Android and Wear OS — update when issue #32 is complete.
+* **1v1 on Android and Wear OS:** The 1v1 mode, scorekeeping from the Wear OS watch, saved matches and records, and nearby Android-to-Android play are now on Android.
 
 ## Work Summary (Developer Facing)
-Sprint 5 started by closing the platform gap left at the end of Sprint 4, where each member had built gamification on a different platform. Melvin ported the Android streak and goal logic to Swift and Kaleb's XP system to Kotlin, using the existing Kotlin unit tests as the reference so both platforms produce the same results for the same dates and data. The main new feature, requested by the team and discussed with the client, was a 1v1 mode for players who compete against each other. We designed it around one rule: the iPhone keeps the official match and applies the rules, and every other device (the Apple Watch, or a second iPhone) sends plays to it and shows its scoreboard. A match is stored as a list of plays, so undo, history, and syncing all come from the same data. Melvin built the match rules, iPhone screens, and Apple Watch scorekeeping; Kaleb connected two nearby iPhones with MultipeerConnectivity; and Kellam is porting the feature to Android and Wear OS. Our biggest barriers were testing features that need several devices at once (two phones and two watches) and Xcode simulator quirks, such as a freshly booted simulator that never showed the app window. We solved them by testing in paired simulators, writing UI tests that play a full match, and seeding a match into the app's saved data to check phone-to-watch sync. While testing we found and fixed a real bug: a reinstalled watch app stayed on the waiting screen, so the watch now asks the iPhone for the current match when it opens or reconnects.
+Sprint 5 started by closing the platform gap left at the end of Sprint 4, where each member had built gamification on a different platform. Melvin ported the Android streak and goal logic to Swift and Kaleb's XP system to Kotlin, using the existing Kotlin unit tests as the reference so both platforms produce the same results for the same dates and data. The main new feature, requested by the team and discussed with the client, was a 1v1 mode for players who compete against each other. We designed it around one rule: the iPhone keeps the official match and applies the rules, and every other device (the Apple Watch, or a second iPhone) sends plays to it and shows its scoreboard. A match is stored as a list of plays, so undo, history, and syncing all come from the same data. Melvin built the match rules, iPhone screens, and Apple Watch scorekeeping; Kaleb connected two nearby iPhones with MultipeerConnectivity; and Kellam ported the feature, including nearby play, to Android and Wear OS. Our biggest barriers were testing features that need several devices at once (two phones and two watches) and Xcode simulator quirks, such as a freshly booted simulator that never showed the app window. We solved them by testing in paired simulators, writing UI tests that play a full match, and seeding a match into the app's saved data to check phone-to-watch sync. While testing we found and fixed a real bug: a reinstalled watch app stayed on the waiting screen, so the watch now asks the iPhone for the current match when it opens or reconnects.
 
 ## Unfinished Work
-* **1v1 on Android and Wear OS (#32):** Kellam is still porting the feature. TODO: update with final status before submission.
-* **Nearby 1v1 follow-ups (#31):** Kaleb's 4 new tests are written in XCTest style inside a Swift Testing file, so they do not run yet, and the `_udp` Bonjour service needed by MultipeerConnectivity on real iPhones is missing.
-* **Real-device deployment (#34):** All Sprint 5 features were verified in Xcode simulators and Android emulators. Installing on the team's own iPhones, Apple Watches, and Android devices, and a TestFlight / Play Console internal-testing build through the client's accounts, are still in progress.
+* **Nearby 1v1 follow-ups (#31):** The nearby iPhone feature is tested and complete, but Kaleb's 4 new tests are written in XCTest style inside a Swift Testing file, so they do not run yet, and the `_udp` Bonjour service needed by MultipeerConnectivity on real iPhones is missing.
+* **Real-device deployment (#34):** All Sprint 5 features were verified in Xcode simulators and Android emulators. Nearby Android play still needs testing on two physical Android phones, and Android-to-iPhone play is not supported. Installing on the team's own iPhones, Apple Watches, and Android devices, and a TestFlight / Play Console internal-testing build through the client's accounts, are still in progress.
 * **Restrict 1v1 controls by possession (#25):** A player should not be able to log a basket when it is not their turn. Moved to Sprint 6.
 * **Apple Watch repeated-shot bug (#19):** Still open from Sprint 4.
 
@@ -31,12 +30,12 @@ Here are links to the issues that we completed in this sprint:
  * [#28 1v1 match mode on iPhone: friends, street rules, Red vs Blue scoreboard](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/28)
  * [#29 Apple Watch 1v1 scorekeeping synced with iPhone](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/29)
  * [#30 Nearby 1v1 between two iPhones](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/30)
+ * [#32 Port 1v1 match mode to Android and Wear OS](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32)
  * [#20 Android/Wear OS parity polish and edge cases](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/20)
 
 ## Incomplete Issues/User Stories
 Here are links to issues we worked on but did not complete in this sprint:
 
- * [#32 Port 1v1 match mode to Android and Wear OS](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/32) <<TODO: Kellam's status>>
  * [#31 Nearby 1v1: make the new store tests run and add the _udp Bonjour service](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/31) We found these problems in code review at the end of the sprint.
  * [#34 Deploy to real devices and prepare TestFlight / Play internal testing](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/34) A TestFlight or Play Console build requires the client's developer accounts, which we have not set up yet.
  * [#33 Sprint 5 system, integration, and user testing](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/33) Real-device and user testing depend on #34.
@@ -49,7 +48,7 @@ Here are links to issues we worked on but did not complete in this sprint:
 |---|---|---|---|
 | Melvin Sanare | Gamification parity across iOS and Android, 1v1 match mode on iPhone, Apple Watch 1v1 scorekeeping and sync, tests, GitHub issues, MoMs, report | #27, #28, #29, #33, #35 | 18 + documentation |
 | Kaleb Kebede | Nearby two-phone 1v1 with MultipeerConnectivity, possession rules design | #30, #31, #25 | 5 |
-| Kellam Adams | Android and Wear OS port of 1v1 | #32 | TODO |
+| Kellam Adams | Android and Wear OS port of 1v1 with nearby Android play, Android test evidence, Sprint 5 slides | #32 | 8 |
 
 ## Testing and Validation
 
@@ -61,7 +60,8 @@ Here are links to issues we worked on but did not complete in this sprint:
 | `OneOnOneStoreTests` (Swift) | Friends, win/loss records, unsaved unfinished matches, resuming a paused match | 5/5 pass (Kaleb's 4 nearby tests do not run yet, #31) |
 | `WatchMatchBridgeTests` (Swift) | What the watch receives, plays from the watch, ignoring old matches, saving from the watch | 7/7 pass |
 | `StreakCalculatorTests`, `GoalTrackerTests`, `XPCalculatorTests`, `CelebrationMessageTests`, `AppDataStoreGamificationTests` (Swift) | Streak, goal, XP, and popup rules using the same known dates and data as the Kotlin tests | 40/40 pass |
-| `StreakCalculatorTest`, `GoalTrackerTest`, `GamificationPayloadsTest`, `ModelsTest`, `XpCalculatorTest` (Kotlin) | Same rules on Android | TODO: rerun on Windows and record |
+| Android unit tests (Kotlin): `MatchEngineTest`, `MatchProtocolTest`, `NearbyMatchCoordinatorTest`, `NearbyMatchPayloadsTest`, `OneOnOneRepositoryTest`, `NearbyPermissionsTest`, `StreakCalculatorTest`, `GoalTrackerTest`, `GamificationPayloadsTest`, `XpCalculatorTest`, `ModelsTest`, `ExampleUnitTest` | 1v1 rules, saved matches, nearby sync, gamification | 121/121 pass |
+| Android emulator UI tests | Phone 1v1 and nearby screens (9), Wear OS match screen (4) | 13/13 pass |
 
 ### Integration and system tests
 | Test | Devices | Result |
@@ -72,12 +72,13 @@ Here are links to issues we worked on but did not complete in this sprint:
 | Plays tapped on the watch update the iPhone and come back to the watch | iPhone + Apple Watch simulators | ✅ Pass |
 | Reinstalled or reopened watch app recovers the match in progress | iPhone + Apple Watch simulators | ✅ Pass after fix |
 | Streak, goal, and level stats shown on each player's own watch | Two iPhones + two Apple Watches | ✅ Pass |
-| Two nearby iPhones play one shared match | Two iPhones | TODO |
-| 1v1 on Android and Wear OS | Android phone + Wear OS | TODO |
+| Two nearby iPhones play one shared match | Two iPhones | ✅ Pass (tested by Kaleb) |
+| 1v1 scoring from the phone and the watch, undo, and cancel stay in sync | Paired Android phone + Wear OS emulators | ✅ Pass |
+| Two nearby Android phones play one shared match | Two physical Android phones | TODO |
 
 ### Non-functional checks
 * **Reliability:** Plays from the watch are queued while the iPhone is out of range and delivered once it reconnects; each play has an ID so it is never counted twice.
-* **Usability:** Watch buttons were kept large (+1/+2 at 48 pt tall), and steals were left to the iPhone so the watch has only five buttons.
+* **Usability:** Watch buttons were kept large (+1/+2 at 48 pt tall), steals were left to the phone so the watch has only five buttons, and Wear OS controls were moved away from the round screen edges.
 * **Performance:** TODO: watch-to-phone delay measured on real devices.
 
 ### User testing
@@ -90,6 +91,8 @@ Please review the following code files, which were actively developed during thi
  * [MatchView.swift](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/OneOnOne/MatchView.swift)
  * [WatchMatchBridge.swift](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/OneOnOne/WatchMatchBridge.swift)
  * [SharedWorkout.swift (phone ↔ watch sync)](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/SharedWorkout.swift)
+ * [MatchEngine.kt (Android)](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/android/shared/src/main/java/com/squatchsports/training/shared/MatchEngine.kt)
+ * [MatchScreen.kt (Wear OS)](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/android/wear/src/main/java/com/squatchsports/training/presentation/MatchScreen.kt)
  * [ContentView.swift (watch 1v1 screens)](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/ContentView.swift)
  * [NearbyMatchService.swift](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/OneOnOne/NearbyMatchService.swift)
  * [Gamification.swift](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/blob/main/Squatch%20Sports%20Basketball%20Training%20WatchOS%20Companion/Gamification.swift)
@@ -114,12 +117,12 @@ Here's what went well:
 
 Here's what we'd like to improve:
   * Test on real devices earlier; multi-device features are hard to verify in simulators.
-  * Keep all three members working in parallel so the Android port does not fall behind the iOS work.
+  * Start each platform's version of a feature at the same time so the Android port does not trail the iOS work.
   * Review pull requests before merging so problems like tests that never run are caught earlier.
 
 Here are changes we plan to implement in the next sprint:
   * Restrict 1v1 controls by possession so players cannot score out of turn (#25).
-  * Finish the Android and Wear OS 1v1 port (#32) and the nearby follow-ups (#31).
+  * Finish the nearby follow-ups (#31) and test nearby Android play on physical phones.
   * Deploy through TestFlight and Play Console internal testing with the client, and run user testing on real devices (#34, #33).
   * Keep the watch app on screen during a match with a HealthKit workout session (#36).
   * Final regression testing, UI/UX polish, documentation, and handoff to Squatch Sports.
