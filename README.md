@@ -106,7 +106,7 @@ Friends and records are stored locally, not in online accounts. Nearby games cop
 
 Open **1v1 → Nearby Players** on both phones to discover an opponent and play a shared game. The Android port uses encrypted Google Nearby Connections: grant nearby permissions, connect from one phone, compare and accept the code on both phones, then let the connecting phone configure/start the game. Either phone or paired watch can log plays; scores, undo, save and cancellation synchronize. The host orders all Android plays, and pending guest commands survive disconnects/restarts until acknowledged. Reconnect to the same phone to resume syncing.
 
-**iPhone-to-iPhone and Android-to-Android are supported separately—not Android-to-iPhone.** iOS uses Apple's MultipeerConnectivity; the transports/protocols are not interoperable. Keep both phone apps open. Physical-device discovery/transport still requires release testing; see [`android/README.md`](android/README.md#nearby-1v1-two-android-phones).
+**iPhone-to-iPhone and Android-to-Android are supported separately—not Android-to-iPhone.** iOS uses Apple's MultipeerConnectivity; the transports/protocols are not interoperable. Keep both phone apps open. The team considers Kaleb's nearby iPhone feature tested and complete. Android physical-device discovery/transport remains a release-testing follow-up; see [`android/README.md`](android/README.md#nearby-1v1-two-android-phones).
 
 ## Known Problems
 
@@ -129,6 +129,7 @@ Open **1v1 → Nearby Players** on both phones to discover an opponent and play 
 
 * Sprint reports: [Sprint 1](Sprints/Sprint_1/Sprint_Report/Sprint1_Report.md), [Sprint 2](Sprints/Sprint_2/Sprint_Report/Sprint2_Report.md), [Sprint 3](Sprints/Sprint_3/Sprint_Report/Sprint3_Report.md), [Sprint 4](Sprints/Sprint_4/Sprint_Report/Sprint4_Report.md)
 * Client meeting minutes: [Sprint 4 MoMs](Sprints/Sprint_4/MoM/)
+* Sprint 5 review: [PowerPoint](Sprints/Sprint_5/PPT/Sprint5_Review.pptx), [recording plan](Sprints/Sprint_5/Video/Sprint5_Demo.md), and [Android verification](Sprints/Sprint_5/Testing/Android_Verification.md)
 * Android project notes: [android/README.md](android/README.md)
 * Squatch Sports: <https://www.squatchsports.com>
 

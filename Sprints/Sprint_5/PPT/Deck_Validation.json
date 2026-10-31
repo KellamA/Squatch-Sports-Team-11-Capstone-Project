@@ -1,0 +1,16 @@
+{
+  "slides": 17,
+  "speaker_notes": 17,
+  "bounds_errors": [],
+  "zip_integrity": "pass",
+  "template": "Sprints/Sprint_4/PPT/Sprint4_Review.pptx",
+  "source_docs_commit": "86171e9",
+  "android_base_commit": "c4b0c764ffbbf5791418bb0a3a86929f53e6b9a6",
+  "android_merge_pr": 38,
+  "kaleb_testing_status": "Tested and complete per Kellam Adams confirmation; no new assistant-run iOS test counts claimed",
+  "native_render_engine": "macOS QuickLook",
+  "native_slide_renders": 17,
+  "native_visual_review": "All 17 native slide renders reviewed; long headings and a table header were adjusted to avoid wrapping.",
+  "overview": "Slide_Overview.png",
+  "note": "Package and shape-bounds checks passed. Native QuickLook import/render was reviewed, not Microsoft PowerPoint itself. Arial is used for portable rendering."
+}
