@@ -94,11 +94,25 @@ Gamification rules (same on Android/Wear OS and iOS/watchOS):
 * **Goals:** daily shots, daily makes, weekly sessions, and today's FG% (FG% only counts after 10 shots). Each goal celebrates once per day or week.
 * **XP:** 25 XP per workout, 1 XP per make, 2 bonus XP per swish, and 15 bonus XP for 75%+ shooting. You level up every 100 XP.
 
+### 1v1 matches (iOS/watchOS and Android/Wear OS)
+
+Open **Dashboard → 1v1**, add a friend, and tap **Play**. Choose your color, 1s/2s or 2s/3s, a target score (5–50), win-by-two, make-it-take-it, and first possession (or flip a coin). The live court tracks points, possession, fouls, turnovers, and steals, with undo. Pause and resume a game, then save its result to your overall and head-to-head records.
+
+The watch shows both scores and lets you log either player's baskets, misses, fouls, and turnovers, undo, and save a finished match. On Wear OS, swipe left/right or tap the player-switch button. Android match plays are persisted in a FIFO outbox and delivered through the Wear OS Data Layer; the phone deduplicates them and can process them while its activity is closed. The watch shows pending plays until the phone acknowledges them. This reliability applies to **1v1**, not the older workout-shot protocol.
+
+Friends and records are stored locally, not in online accounts. Nearby games copy the shared match to both players' phones. Detailed play-by-play/history screens, extra foul penalties, and steals on the watch remain future work on both platforms. Open the watch app to use scorekeeping; neither platform automatically launches it or starts a fitness-tracking session.
+
+### Nearby multiplayer
+
+Open **1v1 → Nearby Players** on both phones to discover an opponent and play a shared game. The Android port uses encrypted Google Nearby Connections: grant nearby permissions, connect from one phone, compare and accept the code on both phones, then let the connecting phone configure/start the game. Either phone or paired watch can log plays; scores, undo, save and cancellation synchronize. The host orders all Android plays, and pending guest commands survive disconnects/restarts until acknowledged. Reconnect to the same phone to resume syncing.
+
+**iPhone-to-iPhone and Android-to-Android are supported separately—not Android-to-iPhone.** iOS uses Apple's MultipeerConnectivity; the transports/protocols are not interoperable. Keep both phone apps open. The team considers Kaleb's nearby iPhone feature tested and complete. Android physical-device discovery/transport remains a release-testing follow-up; see [`android/README.md`](android/README.md#nearby-1v1-two-android-phones).
+
 ## Known Problems
 
 * **Apple Watch misses repeated shots from the iPhone** ([#19](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/19)). In `ContentView.swift`, `.onChange(of: connectivity.receivedValue)` does not fire when the same shot code arrives twice in a row. Reproduce by tapping MAKE twice on the iPhone's Quick Log.
 * **Android polish still in progress** ([#20](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/20)):
-  * The Settings toggles are not saved, and the watch connection status is a placeholder (`SettingsScreen.kt`).
+  * The Settings preference toggles are still placeholders and are not permanently saved (`SettingsScreen.kt`). Connection status now reflects connected Wear OS nodes.
   * Some drill descriptions list different shots per spot than the app uses. For example, Spot Shooting says 10, while every drill uses 5 (`Drills.kt`).
   * Shots are not queued if the phone and watch disconnect during a workout (`WorkoutConnectivity.kt`).
 * **Emulator tip:** if the Android emulator stops responding to mouse clicks, cold boot it from **Device Manager → ⋮ → Cold Boot Now**. The API 37 phone image also logs repeated crashes of a UWB hardware service; this is an emulator issue and does not affect the app.
@@ -115,6 +129,7 @@ Gamification rules (same on Android/Wear OS and iOS/watchOS):
 
 * Sprint reports: [Sprint 1](Sprints/Sprint_1/Sprint_Report/Sprint1_Report.md), [Sprint 2](Sprints/Sprint_2/Sprint_Report/Sprint2_Report.md), [Sprint 3](Sprints/Sprint_3/Sprint_Report/Sprint3_Report.md), [Sprint 4](Sprints/Sprint_4/Sprint_Report/Sprint4_Report.md)
 * Client meeting minutes: [Sprint 4 MoMs](Sprints/Sprint_4/MoM/)
+* Sprint 5 review: [PowerPoint](Sprints/Sprint_5/PPT/Sprint5_Review.pptx), [recording plan](Sprints/Sprint_5/Video/Sprint5_Demo.md), and [Android verification](Sprints/Sprint_5/Testing/Android_Verification.md)
 * Android project notes: [android/README.md](android/README.md)
 * Squatch Sports: <https://www.squatchsports.com>
 

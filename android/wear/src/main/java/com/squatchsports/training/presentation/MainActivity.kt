@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connectivity = WorkoutConnectivity(applicationContext)
+        connectivity = (application as WearTrainingApplication).connectivity
         setContent {
             SquatchSportsTheme {
                 var showSplash by rememberSaveable { mutableStateOf(true) }

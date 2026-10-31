@@ -17,11 +17,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         appData = AppDataStore(applicationContext)
-        connectivity = WorkoutConnectivity(applicationContext)
+        val app = application as TrainingApplication
+        connectivity = app.connectivity
 
         setContent {
             SquatchSportsTheme {
-                SquatchSportsApp(appData = appData, connectivity = connectivity)
+                SquatchSportsApp(appData = appData, connectivity = connectivity, matchStore = app.matchStore, nearby = app.nearby)
             }
         }
     }
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onStop() {
+        (application as TrainingApplication).nearby.stopSearching()
         connectivity.stopListening()
         super.onStop()
     }

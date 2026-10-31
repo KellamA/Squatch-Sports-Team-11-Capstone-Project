@@ -6,7 +6,7 @@ This Android Studio project is the Kotlin/Jetpack Compose port of the iOS and wa
 
 - `app` — Android phone app (API 26+)
 - `wear` — Wear OS companion app (API 30+)
-- `shared` — workout models, court positions, shot codes, and phone/watch message protocol
+- `shared` — workout/gamification models, 1v1 rules and persistence, court positions, and phone/watch protocols
 
 Both application modules use the application ID `com.squatchsports.training` so the Wear OS Data Layer can authenticate communication between them.
 
@@ -23,6 +23,35 @@ Both application modules use the application ID `com.squatchsports.training` so 
 
 The phone workout screen also includes the same Quick Log controls as the iOS prototype for testing without watch gestures.
 
+## 1v1 matches
+
+1. Open **Dashboard → 1v1 → Add Friend**, enter a name, then tap **Play**.
+2. Pick your color, scoring system, target, win-by-two, make-it-take-it, and first possession. Tap **Start Match**.
+3. Log points, fouls, turnovers, steals, and possession changes on the phone. Undo reverses the last play, including a winning basket.
+4. On Wear OS, swipe horizontally (or tap the player-switch button) between your plays and your opponent's. Each page has scoring, Miss, Foul, TO, and Undo controls. Save a finished match from either device.
+5. **Leave Match → Pause and leave** keeps the game for later. Resume from the hub. **End without saving** discards it. Saved results update overall and per-friend records and recent games.
+
+The phone is authoritative. Friends, settings, active events, and completed games survive process restarts. Watch commands are saved before sending, retried in order, and removed only after an application acknowledgement; processed IDs are saved atomically with the match to prevent duplicate scoring after a restart. A `WearableListenerService` handles match batches even when the phone activity is closed. State revisions prevent late snapshots from resurrecting an older scoreboard. The watch keeps the screen awake during foreground match play, but does not automatically launch or record a fitness workout.
+
+Friends are local names, not online accounts. As on iOS, detailed game/head-to-head screens, additional foul penalties, and watch steal controls are not implemented yet. Regular **workout shots** still use the older foreground-only message protocol described below; the durable 1v1 queue does not change that protocol.
+
+## Nearby 1v1 (two Android phones)
+
+1. On **both phones**, open **Dashboard → 1v1 → Nearby Players → Find Nearby Players**. Allow the requested permissions. Enable Bluetooth and Wi-Fi; Android 12L and older also require Location to be enabled. Google Play services must be installed and up to date; an internet connection is not required for play.
+2. On **one phone only**, tap **Connect** next to your opponent. Compare the displayed connection code on both phones and tap **Codes Match — Accept** only if the codes match. Reject unexpected requests. The phone that requested the connection hosts the game.
+3. The host chooses colors, scoring, target, win-by-two, make-it-take-it and first possession, then taps **Start Nearby 1v1**. Both phones open the same match, with opposite player perspectives.
+4. Log plays on either phone or either paired Wear OS watch. Scoring, possession, fouls, turnovers, steals, undo, save and cancellation synchronize. A saved result counts as a win for one player and a loss for the other.
+5. If disconnected, reopen Nearby Players and reconnect to the **same opponent's phone**. Guest plays remain queued (the guest scoreboard waits for host confirmation); host plays and results are retained. **Pause / reconnect** is available on the game-over card too. Guest cancellation/save requests require host acknowledgement; they are not silently treated as completed while offline. If the host is permanently unavailable, **Cannot reconnect? Abandon local copy** offers a separate confirmation to discard only this phone's game/queued plays; it does not cancel the opponent's game or save a result.
+6. **Disconnect** closes the peer connection without deleting the saved match. Searching stops when leaving the discovery screen or backgrounding the app; an established connection is retained while the process is alive. Keep both phone apps open during nearby play. Reconnect after a process restart.
+
+Implementation: Google Nearby Connections, encrypted point-to-point transport with explicit code confirmation. The shared `NearbyMatchCoordinator` serializes guest commands at the host, persists deduplication IDs/outboxes/session roles, rejects older snapshots, and imports the host event log without echoing it. Complete snapshots recover missed plays and undo operations after reconnecting. Long logs use bounded stream payloads rather than exceeding Nearby's 32 KiB byte-payload limit. Both phones continue publishing the confirmed scoreboard to their watches.
+
+**Compatibility:** Android-to-Android only. The iOS implementation uses Apple's MultipeerConnectivity, which cannot communicate with this transport. Cross-platform play requires migrating iOS to the same transport/protocol (or adding a shared backend); this change does not modify iOS. Friends/results are still stored locally, without accounts or cloud sync.
+
+Nearby permissions are requested only when the user searches: Bluetooth on Android 12+, Nearby Wi-Fi on Android 13+, local network access on Android 17+, and location on older Android versions. There is no file/media permission or automatic peer acceptance. See [Google's permission requirements](https://developers.google.com/nearby/connections/android/get-started).
+
+**Release check:** use two physical Android phones (and paired watches if available). Verify code rejection/acceptance, a full game from both phones/watches, undo, disconnect/reconnect with queued plays, a process restart, save and cancellation. Emulator screen tests and in-memory two-peer protocol tests do not validate physical Bluetooth/Wi-Fi discovery or radio transport.
+
 ## Troubleshooting phone/watch emulator connections
 
 Run `app` on the phone and `wear` on the watch. Keep **both apps open before starting
@@ -35,7 +64,7 @@ is started and does not replay a missed workout-start message. A watch showing
 If Logcat reports `com.google.android.apps.wear.companion` crashing with
 `SecurityException` / `android.permission.BLUETOOTH_CONNECT`, enable **Nearby
 devices** in that companion app's Android permission settings. This is not a
-Squatch crash and does not require adding Bluetooth permissions to Squatch.
+Squatch crash. Grant the permission to the **watch companion app** itself; Squatch's separate Nearby 1v1 permissions do not fix that companion-app crash.
 
 For the local Mac emulator setup, the equivalent commands are below. First use
 `adb devices -l` to confirm the phone's serial; emulator serials can change after
@@ -83,4 +112,10 @@ From this directory:
 
 ```bash
 ./gradlew :app:assembleDebug :wear:assembleDebug testDebugUnitTest lintDebug
+
+# Select each emulator/device with its adb serial:
+ANDROID_SERIAL=<phone-serial> ./gradlew :app:connectedDebugAndroidTest
+ANDROID_SERIAL=<watch-serial> ./gradlew :wear:connectedDebugAndroidTest
 ```
+
+1v1 unit coverage includes both scoring systems, possession, win-by-two, game point, undo/reopening, records, persistence, invalid payloads, stale-match rejection, and offline FIFO delivery/deduplication across process restarts. Phone Compose tests play complete matches with both color/scoring choices and exercise pause/resume, using isolated match storage. Wear OS Compose tests cover both players' controls, paging, offline status, and saving a finished game without sending real Data Layer traffic. Nearby tests additionally cover two serialized peers, host ordering, watch-command forwarding, duplicate/lost messages, reconnect/restart recovery, opposite win/loss records, cancellation, permission policy, and explicit connection confirmation. Paired-device/physical-device transport should also be checked before release.

@@ -1,0 +1,193 @@
+{
+  "captured_at_utc": "2026-10-31T01:21:34.827201+00:00",
+  "source_commit": "c4b0c764ffbbf5791418bb0a3a86929f53e6b9a6",
+  "working_tree": "Android/Wear OS implementation merged into main in PR #38; this does not claim a production release",
+  "publication": {
+    "pull_request": 38,
+    "url": "https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/pull/38",
+    "merge_commit": "c4b0c764ffbbf5791418bb0a3a86929f53e6b9a6",
+    "issue_32_state": "CLOSED"
+  },
+  "kaleb_status": {
+    "status": "tested and complete",
+    "confirmed_by": "Kellam Adams",
+    "evidence_kind": "explicit team confirmation in the current request",
+    "independently_rerun_by_assistant": false
+  },
+  "command": "./gradlew :app:assembleDebug :wear:assembleDebug testDebugUnitTest",
+  "result": "BUILD SUCCESSFUL",
+  "fresh_verification_command": "./gradlew :app:assembleDebug :wear:assembleDebug testDebugUnitTest --rerun-tasks",
+  "fresh_verification_result": "BUILD SUCCESSFUL in 46s",
+  "unit_tests": [
+    {
+      "suite": "ExampleUnitTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/app/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.ExampleUnitTest.xml",
+      "timestamp": "2026-10-31T01:18:02.574Z"
+    },
+    {
+      "suite": "NearbyPermissionsTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/app/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.nearby.NearbyPermissionsTest.xml",
+      "timestamp": "2026-10-31T01:18:02.610Z"
+    },
+    {
+      "suite": "GamificationPayloadsTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.GamificationPayloadsTest.xml",
+      "timestamp": "2026-10-31T01:17:45.548Z"
+    },
+    {
+      "suite": "GoalTrackerTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.GoalTrackerTest.xml",
+      "timestamp": "2026-10-31T01:17:46.301Z"
+    },
+    {
+      "suite": "MatchEngineTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.MatchEngineTest.xml",
+      "timestamp": "2026-10-31T01:17:46.485Z"
+    },
+    {
+      "suite": "MatchProtocolTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.MatchProtocolTest.xml",
+      "timestamp": "2026-10-31T01:17:46.531Z"
+    },
+    {
+      "suite": "ModelsTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.ModelsTest.xml",
+      "timestamp": "2026-10-31T01:17:47.001Z"
+    },
+    {
+      "suite": "NearbyMatchCoordinatorTest",
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.NearbyMatchCoordinatorTest.xml",
+      "timestamp": "2026-10-31T01:17:47.007Z"
+    },
+    {
+      "suite": "NearbyMatchPayloadsTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.NearbyMatchPayloadsTest.xml",
+      "timestamp": "2026-10-31T01:17:47.255Z"
+    },
+    {
+      "suite": "OneOnOneRepositoryTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.OneOnOneRepositoryTest.xml",
+      "timestamp": "2026-10-31T01:17:47.330Z"
+    },
+    {
+      "suite": "StreakCalculatorTest",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.StreakCalculatorTest.xml",
+      "timestamp": "2026-10-31T01:17:47.400Z"
+    },
+    {
+      "suite": "XpCalculatorTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "xml": "android/shared/build/test-results/testDebugUnitTest/TEST-com.squatchsports.training.shared.XpCalculatorTest.xml",
+      "timestamp": "2026-10-31T01:17:47.451Z"
+    }
+  ],
+  "unit_total": 121,
+  "emulator_tests": [
+    {
+      "module": "app",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml": "android/app/build/outputs/androidTest-results/connected/debug/TEST-Pixel_8(AVD) - 17.xml",
+      "timestamp": "2026-10-31T00:36:39"
+    },
+    {
+      "module": "wear",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml": "android/wear/build/outputs/androidTest-results/connected/debug/TEST-Wear_OS_Large_Round(AVD) - 17.xml",
+      "timestamp": "2026-10-31T00:37:06"
+    }
+  ],
+  "emulator_total": 13,
+  "apks": [
+    {
+      "module": "app",
+      "path": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "bytes": 19969652,
+      "sha256": "d19cc8c6bb598a8ec1be0d1d6a0c247f0d21ca273032b17e2fe33bdaa28b0e6b"
+    },
+    {
+      "module": "wear",
+      "path": "android/wear/build/outputs/apk/debug/wear-debug.apk",
+      "bytes": 31145797,
+      "sha256": "f9c46d1d42ccabd385c8e253a075d74571ed0d827ca6e8ce0662d8518798f7c1"
+    }
+  ],
+  "manual_paired_emulator_smoke": {
+    "phone": "Pixel_8 / emulator-5554",
+    "watch": "Wear_OS_Large_Round / emulator-5556",
+    "peer_pairing": "Both devices reported peer true,true after restoring the emulator transport bridge.",
+    "observations": [
+      {
+        "action": "Start match on phone",
+        "observed": "Phone and watch show Kellam 0 / Kaleb 0."
+      },
+      {
+        "action": "Watch: Kellam +2",
+        "observed": "Both phone and watch show 2\u20130."
+      },
+      {
+        "action": "Phone: Kaleb +2",
+        "observed": "Both phone and watch show 2\u20132."
+      },
+      {
+        "action": "Watch: Kellam +2",
+        "observed": "Both show 4\u20132; presentation screenshots captured."
+      },
+      {
+        "action": "Scroll watch and Undo last play",
+        "observed": "Both return to 2\u20132; confirms Undo is reachable by scrolling."
+      },
+      {
+        "action": "Phone: End without saving",
+        "observed": "Phone returns to 1v1 hub with no result; watch clears the match and shows training stats."
+      }
+    ],
+    "limitations": "Emulators only. Not physical device/radio latency or two-phone Nearby transport validation."
+  },
+  "limitations": [
+    "Nearby Bluetooth/Wi-Fi discovery/connection needs two physical Android phones.",
+    "Android-to-iPhone interoperability is not implemented.",
+    "Kaleb\u2019s nearby iPhone feature is team-confirmed tested and complete; no new assistant-run Swift test counts or measurements are claimed.",
+    "Client TestFlight / Play internal distribution and player user testing are still pending."
+  ]
+}
