@@ -5,7 +5,7 @@
 **Client:** Squatch Sports (Mike Niehl, Preston David)
 
 ## YouTube link of Sprint 5 Video (Make this video unlisted)
-* TODO: add unlisted YouTube link
+* [Youtube link:](https://youtu.be/azsZS2ShKGY)
 
 ## What's New (User Facing)
 * **Same gamification on every platform:** Streaks, goal rings, celebration popups, and XP/levels now work on iPhone, Apple Watch, Android, and Wear OS. In Sprint 4, streaks and goals were Android-only and XP was iOS-only.
