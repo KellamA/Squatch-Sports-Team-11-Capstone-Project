@@ -8,7 +8,6 @@
 - **Recording plan:** [../Video/Sprint5_Demo.md](../Video/Sprint5_Demo.md)
 - **Build/test screenshot:** [../Testing/Android_Test_Results.png](../Testing/Android_Test_Results.png)
 - **Verification and handoff text:** [../Testing/Android_Verification.md](../Testing/Android_Verification.md)
-- **Package/layout validation:** [Deck_Validation.json](Deck_Validation.json)
 
 ## Updated completion status
 
