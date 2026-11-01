@@ -74,15 +74,15 @@ Here are links to issues we worked on but did not complete in this sprint:
 | Streak, goal, and level stats shown on each player's own watch | Two iPhones + two Apple Watches | ✅ Pass |
 | Two nearby iPhones play one shared match | Two iPhones | ✅ Pass (tested by Kaleb) |
 | 1v1 scoring from the phone and the watch, undo, and cancel stay in sync | Paired Android phone + Wear OS emulators | ✅ Pass |
-| Two nearby Android phones play one shared match | Two physical Android phones | TODO |
+| Two nearby Android phones play one shared match | Two physical Android phones | Not tested yet (needs two physical phones; Sprint 6, #34) |
 
 ### Non-functional checks
 * **Reliability:** Plays from the watch are queued while the iPhone is out of range and delivered once it reconnects; each play has an ID so it is never counted twice.
 * **Usability:** Watch buttons were kept large (+1/+2 at 48 pt tall), steals were left to the phone so the watch has only five buttons, and Wear OS controls were moved away from the round screen edges.
-* **Performance:** TODO: watch-to-phone delay measured on real devices.
+* **Performance:** Plays from the watch appeared on the phone with no noticeable delay in the simulators. Measuring the delay on real devices is planned for Sprint 6 (#34).
 
 ### User testing
-* TODO: record feedback from players who tried 1v1 and from the client.
+* Not completed in Sprint 5. User testing with players and the client on real devices is planned for Sprint 6 (#33, #34).
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:

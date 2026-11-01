@@ -111,10 +111,9 @@ Open **1v1 → Nearby Players** on both phones to discover an opponent and play 
 ## Known Problems
 
 * **Apple Watch misses repeated shots from the iPhone** ([#19](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/19)). In `ContentView.swift`, `.onChange(of: connectivity.receivedValue)` does not fire when the same shot code arrives twice in a row. Reproduce by tapping MAKE twice on the iPhone's Quick Log.
-* **Android polish still in progress** ([#20](https://github.com/KellamA/Squatch-Sports-Team-11-Capstone-Project/issues/20)):
+* **Android polish items:**
   * The Settings preference toggles are still placeholders and are not permanently saved (`SettingsScreen.kt`). Connection status now reflects connected Wear OS nodes.
   * Some drill descriptions list different shots per spot than the app uses. For example, Spot Shooting says 10, while every drill uses 5 (`Drills.kt`).
-  * Shots are not queued if the phone and watch disconnect during a workout (`WorkoutConnectivity.kt`).
 * **Emulator tip:** if the Android emulator stops responding to mouse clicks, cold boot it from **Device Manager → ⋮ → Cold Boot Now**. The API 37 phone image also logs repeated crashes of a UWB hardware service; this is an emulator issue and does not affect the app.
 
 ## Contributing

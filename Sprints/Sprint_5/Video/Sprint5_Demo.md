@@ -2,7 +2,7 @@
 
 ## Video link
 
-**Pending team recording and unlisted upload.** Insert the actual YouTube URL here and in the Sprint 5 report after upload. Repository merges do not imply that a video has been recorded or submitted.
+**Unlisted YouTube video:** https://youtu.be/azsZS2ShKGY
 
 Present from [Sprint5_Review.pptx](../PPT/Sprint5_Review.pptx). All 15 slides contain speaker notes; a text copy is in [Sprint5_Presenter_Notes.md](../PPT/Sprint5_Presenter_Notes.md).
 

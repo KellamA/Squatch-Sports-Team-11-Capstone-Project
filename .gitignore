@@ -11,3 +11,14 @@ xcuserdata/
 DerivedData/
 build/
 Squatch Sports Basketball Training WatchOS Companion.xcodeproj/project.pbxproj.backup
+
+# iCloud Drive sync copies (e.g. "README 2.md") and placeholders
+* 2
+* 2.*
+*.icloud
+
+# Misc temporary files
+*.orig
+*.tmp
+*.swp
+.build/
