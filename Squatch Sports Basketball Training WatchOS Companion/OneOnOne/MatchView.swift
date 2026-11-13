@@ -119,27 +119,49 @@ struct MatchView: View {
     }
 
     private func controls(_ match: OneOnOneMatch, state: MatchState) -> some View {
-        VStack(spacing: 10) {
+        let localSide = match.userSide
+        let localHasPossession = state.possession == localSide
+
+        return VStack(spacing: 10) {
             HStack(alignment: .top, spacing: 12) {
-                PlayerControls(side: .red, scoring: match.settings.scoring, record: store.record)
-                PlayerControls(side: .blue, scoring: match.settings.scoring, record: store.record)
+                PlayerControls(
+                    side: .red,
+                    scoring: match.settings.scoring,
+                    isLocalPlayer: localSide == .red,
+                    hasPossession: state.possession == .red,
+                    record: store.record
+                )
+
+                PlayerControls(
+                    side: .blue,
+                    scoring: match.settings.scoring,
+                    isLocalPlayer: localSide == .blue,
+                    hasPossession: state.possession == .blue,
+                    record: store.record
+                )
             }
 
             Button {
                 store.record(.possession(state.possession.opponent))
             } label: {
-                Label("Missed shot – ball to \(match.name(for: state.possession.opponent, playerName: store.playerName))",
-                      systemImage: "arrow.left.arrow.right")
-                    .font(.subheadline.weight(.semibold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(state.possession.opponent.color.opacity(0.25), in: RoundedRectangle(cornerRadius: 12))
-                    // Swap the name instantly; a crossfade overlaps the old and new names.
-                    .contentTransition(.identity)
+                Label(
+                    "Missed shot – ball to \(match.name(for: state.possession.opponent, playerName: store.playerName))",
+                    systemImage: "arrow.left.arrow.right"
+                )
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(
+                    state.possession.opponent.color.opacity(0.25),
+                    in: RoundedRectangle(cornerRadius: 12)
+                )
+                .contentTransition(.identity)
             }
             .foregroundStyle(.white)
+            .disabled(!localHasPossession)
+            .opacity(localHasPossession ? 1 : 0.35)
         }
     }
 
@@ -297,6 +319,8 @@ private struct PlayerMarker: View {
 private struct PlayerControls: View {
     let side: PlayerSide
     let scoring: ScoringSystem
+    let isLocalPlayer: Bool
+    let hasPossession: Bool
     let record: (MatchEvent) -> Void
 
     var body: some View {
@@ -305,17 +329,41 @@ private struct PlayerControls: View {
                 scoreButton(points: scoring.insidePoints)
                 scoreButton(points: scoring.outsidePoints)
             }
+
             HStack(spacing: 6) {
-                smallButton("Foul", systemImage: "hand.raised.fill") { record(.foul(side)) }
-                smallButton("TO", systemImage: "arrow.uturn.left") { record(.turnover(side)) }
-                smallButton("Steal", systemImage: "hand.point.up.left.fill") { record(.steal(side)) }
+                smallButton(
+                    "Foul",
+                    systemImage: "hand.raised.fill",
+                    enabled: isLocalPlayer && !hasPossession
+                ) {
+                    record(.foul(side))
+                }
+
+                smallButton(
+                    "TO",
+                    systemImage: "arrow.uturn.left",
+                    enabled: isLocalPlayer && hasPossession
+                ) {
+                    record(.turnover(side))
+                }
+
+                smallButton(
+                    "Steal",
+                    systemImage: "hand.point.up.left.fill",
+                    enabled: isLocalPlayer && !hasPossession
+                ) {
+                    record(.steal(side))
+                }
             }
         }
         .frame(maxWidth: .infinity)
+        .opacity(isLocalPlayer ? 1 : 0.25)
     }
 
     private func scoreButton(points: Int) -> some View {
-        Button {
+        let enabled = isLocalPlayer && hasPossession
+
+        return Button {
             record(.score(side, points: points))
         } label: {
             Text("+\(points)")
@@ -325,14 +373,22 @@ private struct PlayerControls: View {
                 .background(side.color.gradient, in: RoundedRectangle(cornerRadius: 14))
                 .foregroundStyle(.white)
         }
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.35)
         .accessibilityLabel("\(side.title) plus \(points)")
     }
 
-    private func smallButton(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+    private func smallButton(
+        _ title: String,
+        systemImage: String,
+        enabled: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             VStack(spacing: 2) {
                 Image(systemName: systemImage)
                     .font(.caption)
+
                 Text(title)
                     .font(.caption2.weight(.semibold))
             }
@@ -341,9 +397,12 @@ private struct PlayerControls: View {
             .background(side.color.opacity(0.22), in: RoundedRectangle(cornerRadius: 10))
             .foregroundStyle(.white)
         }
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.35)
         .accessibilityLabel("\(side.title) \(title == "TO" ? "turnover" : title.lowercased())")
     }
 }
+
 
 // MARK: - Game over
 

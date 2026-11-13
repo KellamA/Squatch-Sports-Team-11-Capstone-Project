@@ -914,6 +914,7 @@ private struct WatchSidePage: View {
     let send: (WatchMatchCommand.Action) -> Void
 
     private var isUser: Bool { side == match.userSide }
+    private var hasPossession: Bool { match.possession == side }
 
     var body: some View {
         VStack(spacing: 5) {
@@ -925,10 +926,13 @@ private struct WatchSidePage: View {
                 Circle()
                     .fill(side.color)
                     .frame(width: 7, height: 7)
-                Text(isUser ? "Your plays" : "\(match.opponentName)'s plays")
+
+                Text(isUser ? "Your plays" : "\(match.opponentName) — view only")
                     .font(.system(size: 11, weight: .semibold))
                     .lineLimit(1)
+
                 Spacer()
+
                 if isUser {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 9, weight: .bold))
@@ -943,22 +947,55 @@ private struct WatchSidePage: View {
             }
 
             HStack(spacing: 4) {
-                smallButton("Miss", systemImage: "arrow.left.arrow.right") { send(.record(.possession(side.opponent))) }
-                smallButton("Foul", systemImage: "hand.raised.fill") { send(.record(.foul(side))) }
-                smallButton("TO", systemImage: "arrow.uturn.left") { send(.record(.turnover(side))) }
+                smallButton(
+                    "Miss",
+                    systemImage: "arrow.left.arrow.right",
+                    enabled: isUser && hasPossession
+                ) {
+                    send(.record(.possession(side.opponent)))
+                }
+
+                smallButton(
+                    "Foul",
+                    systemImage: "hand.raised.fill",
+                    enabled: isUser && !hasPossession
+                ) {
+                    send(.record(.foul(side)))
+                }
+
+                smallButton(
+                    "TO",
+                    systemImage: "arrow.uturn.left",
+                    enabled: isUser && hasPossession
+                ) {
+                    send(.record(.turnover(side)))
+                }
             }
 
-            Text(phoneReachable ? (match.lastPlay ?? "Log your first play") : "iPhone not connected. Plays will sync.")
-                .font(.system(size: 9))
-                .foregroundStyle(phoneReachable ? Color.secondary : Color.orange)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+            Text(
+                isUser
+                    ? (phoneReachable
+                        ? (match.lastPlay ?? "Log your first play")
+                        : "iPhone not connected. Plays will sync.")
+                    : "Opponent actions must be logged on their device."
+            )
+            .font(.system(size: 9))
+            .foregroundStyle(
+                isUser
+                    ? (phoneReachable ? Color.secondary : Color.orange)
+                    : Color.secondary
+            )
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
         }
         .padding(.horizontal, 4)
+        .opacity(isUser ? 1 : 0.45)
     }
 
     private func scoreButton(_ points: Int) -> some View {
-        Button {
+        let enabled = isUser && hasPossession
+
+        return Button {
             send(.record(.score(side, points: points)))
         } label: {
             Text("+\(points)")
@@ -968,14 +1005,22 @@ private struct WatchSidePage: View {
                 .foregroundStyle(.white)
         }
         .buttonStyle(.plain)
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.35)
         .accessibilityLabel("\(match.name(for: side)) plus \(points)")
     }
 
-    private func smallButton(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+    private func smallButton(
+        _ title: String,
+        systemImage: String,
+        enabled: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             VStack(spacing: 1) {
                 Image(systemName: systemImage)
                     .font(.system(size: 11))
+
                 Text(title)
                     .font(.system(size: 9, weight: .semibold))
             }
@@ -984,9 +1029,12 @@ private struct WatchSidePage: View {
             .foregroundStyle(.white)
         }
         .buttonStyle(.plain)
+        .disabled(!enabled)
+        .opacity(enabled ? 1 : 0.35)
         .accessibilityLabel("\(match.name(for: side)) \(title == "TO" ? "turnover" : title.lowercased())")
     }
 }
+
 
 /// Red vs Blue scores with fouls and a ball next to whoever has it.
 private struct WatchMatchScoreboard: View {
