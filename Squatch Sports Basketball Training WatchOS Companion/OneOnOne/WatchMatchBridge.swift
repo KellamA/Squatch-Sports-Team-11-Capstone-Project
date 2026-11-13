@@ -33,16 +33,51 @@ extension OneOnOneStore {
         )
     }
 
-    /// Applies a command from the watch. Ignored if it was meant for a different (older) match.
+    /// Applies a command from the watch. Ignored if it was meant for a different
+    /// match or if the action is not valid for this player's side/possession.
     func handle(_ command: WatchMatchCommand) {
-        guard activeMatch?.id == command.matchID else { return }
+        guard let match = activeMatch, match.id == command.matchID else { return }
+
         switch command.action {
         case .record(let event):
+            guard isValidWatchEvent(event, for: match) else { return }
             record(event)
+
         case .undo:
             undoLastEvent()
+
         case .finish:
             finishMatch()
+        }
+    }
+
+    /// The watch may only control this phone's player, and actions must make
+    /// sense for the current possession.
+    private func isValidWatchEvent(_ event: MatchEvent, for match: OneOnOneMatch) -> Bool {
+        let localSide = match.userSide
+        let possession = match.state.possession
+        let localHasPossession = possession == localSide
+
+        // No new plays should be recorded after the match has a winner.
+        guard match.state.winner == nil else { return false }
+
+        switch event {
+        case .score(let side, _):
+            return side == localSide && localHasPossession
+
+        case .turnover(let side):
+            return side == localSide && localHasPossession
+
+        case .foul(let side):
+            return side == localSide && !localHasPossession
+
+        case .steal(let side):
+            return side == localSide && !localHasPossession
+
+        case .possession(let side):
+            // The watch uses this event for a missed shot:
+            // the local player had the ball and possession moves to the opponent.
+            return localHasPossession && side == localSide.opponent
         }
     }
 }
